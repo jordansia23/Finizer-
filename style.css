@@ -35,18 +35,7 @@
   }
   
   .brand img {
-    height: 100px;
-  }
-  
-  .brand-name {
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--primary);
-  }
-  
-  .brand-tagline {
-    font-size: 12px;
-    color: var(--muted);
+    height: 120px;
   }
   
   nav a {
