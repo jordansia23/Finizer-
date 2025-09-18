@@ -44,20 +44,13 @@ function openTermsModal() {
 document.getElementById("signupForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  const fullname = document.getElementById("fullname").value.trim();
-  const birthday = document.getElementById("birthday").value;
+  const username = document.getElementById("username").value.trim();
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const terms = document.getElementById("terms").checked;
 
-  if (!fullname || !birthday || !email || !password) {
+  if (!username || !email || !password) {
     alert("Please fill in all fields.");
-    return;
-  }
-
-  const birthDate = new Date(birthday);
-  if (isNaN(birthDate.getTime()) || birthDate > new Date()) {
-    alert("Please enter a valid birthday.");
     return;
   }
 
