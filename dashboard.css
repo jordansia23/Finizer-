@@ -28,7 +28,7 @@ body {
 }
 
 .icon{
-  font-size: 28px;
+  font-size: 23px;
   background: none;
   border: none;
   cursor: pointer;
@@ -40,4 +40,26 @@ body {
   transform: scale(1.4) translateY(-10px);
   color: #F5B942; /* brighter gold */
   text-shadow: 0 0 10px #F5B942;
+}
+.icon::after {
+  content: attr(aria-label); /* kunin yung label galing sa attribute */
+  position: absolute;
+  bottom: 60px; /* layo sa icon */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #F5B942;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.icon:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
 }
