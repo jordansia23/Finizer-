@@ -1,14 +1,43 @@
 :root {
   --primary: #F5B942;
-  --background: url("dashboard\ bg.gif");
+  /* --background: url("dashboard\ bg.gif"); */
   --text: #ffffff;
   --muted: #aaaaaa;
 }
 
 body {
-  background: var(--background) no-repeat center center fixed;
-  background-size: cover;
-  color: var(--text);
-  line-height: 1.6;
-  scroll-behavior: smooth;
+   margin: 0;
+  height: 96vh;
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: flex-end;   /* stick to bottom */
+  background: #070606;        /* black bg */
+}
+
+.dock {
+  display: flex;
+  gap: 30px;
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  background: rgba(18, 18, 18, 0.9);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgb(36, 35, 35);
+  width: 30%;
+  justify-content: center;
+}
+
+.icon{
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #F5B942;
+  transition: transform 0.1s, color 0.2s;
+}
+
+.icon:hover {
+  transform: scale(1.4) translateY(-10px);
+  color: #F5B942; /* brighter gold */
+  text-shadow: 0 0 10px #F5B942;
 }

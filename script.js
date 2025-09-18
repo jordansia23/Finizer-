@@ -69,3 +69,9 @@ document.getElementById("signupForm").addEventListener("submit", function (e) {
   document.querySelector(".bg-modal-signup").style.display = "none";
   document.querySelector(".bg-modal").style.display = "flex";
 });
+
+document.querySelectorAll('.icon').forEach(btn => {
+  btn.addEventListener('click', () => {
+    alert("You clicked " + btn.dataset.app);
+  });
+});
