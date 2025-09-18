@@ -1,0 +1,256 @@
+:root {
+  --primary: #F5B942;
+  --background: url("landingbg.gif");
+  --text: #ffffff;
+  --muted: #aaaaaa;
+}
+
+body {
+  background: var(--background) no-repeat center center fixed;
+  background-size: cover;
+  color: var(--text);
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* HEADER */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 10%;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.brand img {
+  height: 50px;
+}
+nav a {
+  color: var(--text);
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+nav a:hover {
+  color: var(--primary);
+}
+
+/* HERO SECTION */
+.hero {
+  text-align: center;
+  padding: 80px 10%;
+}
+.hero h1 {
+  font-size: 3rem;
+  color: var(--primary);
+}
+.hero p {
+  margin: 20px 0;
+  color: var(--muted);
+  font-size: 1.2rem;
+}
+.btn {
+  background: var(--primary);
+  color: #000;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s;
+}
+.btn:hover {
+  background: #FFD65A;
+  transform: scale(1.05);
+}
+
+/* FEATURES */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  padding: 60px 5%;
+}
+.feature {
+  background: rgba(255,255,255,0.05);
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  transition: 0.3s;
+}
+.feature h3 {
+  color: var(--primary);
+}
+.feature:hover {
+  transform: translateY(-20px);
+  background: rgba(255,255,255,0.1);
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* MODALS */
+.bg-modal,
+.bg-modal-signup,
+.bg-modal-terms {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-content {
+  width: 500px;
+  background: #111;
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  text-align: center;
+  padding: 30px 20px;
+  position: relative;
+  color: var(--text);
+  box-shadow: 0 0 20px rgba(245, 185, 66, 0.3);
+}
+.modal-content img {
+  height: 40px;
+  width: 120px;
+  margin-bottom: 15px;
+}
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  width: 100%;
+}
+.modal-content input {
+  width: 80%;
+  padding: 12px 15px;
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--text);
+  background-color: #111;
+  outline: none;
+}
+.modal-content input::placeholder {
+  color: #777;
+}
+.modal-content .button {
+  margin-top: 10px;
+  background: var(--primary);
+  color: #000;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s;
+}
+.modal-content .button:hover:not(:disabled) {
+  background: #FFD65A;
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(255, 214, 90, 0.5);
+}
+.modal-content .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Close button - same for all modals */
+.close {
+  color: #fff;
+  position: absolute;
+  top: 10px;
+  right: 28px;
+  font-size: 40px;
+  cursor: pointer;
+}
+.close:hover {
+  color: var(--primary);
+}
+
+/* Signup text */
+.signup-text {
+  font-size: 0.85rem;
+  color: #ccc;
+}
+.signup-link {
+  color: var(--primary);
+  font-weight: bold;
+  cursor: pointer;
+}
+.signup-link:hover {
+  color: #FFD65A;
+  text-decoration: underline;
+}
+
+/* Terms Label */
+.terms-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  margin: 10px 0;
+}
+.terms-label input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--primary);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+}
+.terms-label input[type="checkbox"]:checked {
+  background: var(--primary);
+}
+.terms-label input[type="checkbox"]:checked::after {
+  content: "✔";
+  font-size: 14px;
+  color: #111;
+  position: absolute;
+  top: -2px;
+  left: 2px;
+}
+.terms-link {
+  color: var(--primary); /* SAME COLOR as Log in */
+  font-weight: bold;
+  cursor: pointer;
+}
+.terms-link:hover {
+  color: #FFD65A;
+  text-decoration: underline;
+}
+
+/* Terms modal */
+.bg-modal-terms .modal-content.terms-modal {
+  width: 500px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 25px;
+  text-align: center; /* centered content */
+}
+.bg-modal-terms h2 {
+  color: var(--primary);
+}
