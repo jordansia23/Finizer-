@@ -6,25 +6,64 @@
 }
 
 body {
-   margin: 0;
-  height: 96vh;
+    margin: 0;
+  min-height: 100vh;
   display: flex;
-  justify-content: center; /* center horizontally */
-  align-items: flex-end;   /* stick to bottom */
-  background: #070606;        /* black bg */
+  flex-direction: column; /* vertical layout */
+  background: #070606;
+    color: var(--text);
+  
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-.dock {
+.main {
+  flex: 1; /* filler space sa gitna */
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 10%;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.brand img {
+  height: 50px;
+}  
+.brand img {
+  height: 50px;
+}
+nav a {
+  color: var(--text);
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+nav a:hover {
+  color: var(--primary);
+} 
+
+.dock {
+    display: flex;
   gap: 30px;
   padding: 12px 20px;
-  margin-bottom: 20px;
   background: rgba(18, 18, 18, 0.9);
   border-radius: 16px;
   backdrop-filter: blur(10px);
   box-shadow: 0 0 20px rgb(36, 35, 35);
-  width: 30%;
   justify-content: center;
+
+  margin: 20px auto;   /* center horizontally + keep compact */
 }
 
 .icon{
@@ -62,4 +101,41 @@ body {
 .icon:hover::after {
   opacity: 1;
   transform: translateX(-50%) translateY(-5px);
+}
+
+/* 📱 Tablet view */
+@media (max-width: 768px) {
+  .dock {
+    width: 70%;             /* mas malapad sa tablet */
+    gap: 20px;              /* mas maliit na pagitan */
+    padding: 10px 15px;
+  }
+
+  .icon {
+    font-size: 20px;        /* lumiit ng konti yung icons */
+  }
+
+  .icon::after {
+    bottom: 50px;           /* ayusin position ng label */
+    font-size: 11px;
+  }
+}
+
+/* 📱 Phone view */
+@media (max-width: 480px) {
+  .dock {
+    width: 90%;             /* halos full width */
+    gap: 15px;
+    padding: 8px 12px;
+    flex-wrap: wrap;        /* bumabalot yung icons kapag di kasya */
+  }
+
+  .icon {
+    font-size: 18px;        /* mas maliit ulit icons */
+  }
+
+  .icon::after {
+    bottom: 45px; 
+    font-size: 10px;
+  }
 }
