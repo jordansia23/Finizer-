@@ -227,11 +227,11 @@ footer {
 }
 .terms-label input[type="checkbox"]:checked::after {
   content: "✔";
-  font-size: 14px;
+  font-size: 22px;
   color: #111;
   position: absolute;
-  top: -2px;
-  left: 2px;
+  top: -3px;
+  left: 6px;
 }
 .terms-link {
   color: var(--primary); /* SAME COLOR as Log in */
