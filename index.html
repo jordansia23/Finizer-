@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Finizer - Smart Personal Finance Assistant</title>
+  <link rel="icon" type="image/png" href="logo-circle.ico">
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <header>
     <div class="brand">
-      <img src="logooo.png" alt="Finizer Logo">
+      <img src="finizer name.png" alt="Finizer Logo">
     </div>
     <nav>
       <a href="#">Home</a>
@@ -24,7 +27,8 @@
   <section class="hero fade-in">
     <h1>Welcome to Finizer</h1>
     <p>A smart personal finance assistant that helps you manage, plan, and grow your money smarter with AI-driven insights.</p>
-    <a href="#" class="btn">Get Started</a>
+    <!-- Get Started opens modal -->
+    <a href="#" class="btn open-modal">Get Started</a>
   </section>
 
   <section class="features">
@@ -46,10 +50,68 @@
     </div>
   </section>
 
+  <!-- Log In Modal -->
+  <div class="bg-modal">
+    <div class="modal-content">
+      <div class="close">&times;</div>
+      <img src="finizer name.png" alt="Finizer Logo">
+      <form action="">
+        <input type="text" placeholder="Username" required>
+        <input type="password" placeholder="Password" required>
+        <p class="signup-text">
+          Don't have an account yet?
+          <span class="signup-link" onclick="openSignupModal()">Sign up</span>
+        </p>
+        <a href="#" class="button">Login</a>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sign Up Modal -->
+  <div class="bg-modal-signup">
+    <div class="modal-content">
+      <div class="close">&times;</div>
+      <img src="finizer name.png" alt="Finizer Logo">
+      <form id="signupForm">
+        <input type="text" id="fullname" placeholder="Full Name" required>
+        <input type="date" id="birthday" placeholder="Birthday" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+
+        <label class="terms-label">
+          <input type="checkbox" id="terms" required>
+          <span>I agree with the <span class="terms-link" onclick="openTermsModal()">Terms and Conditions</span></span>
+        </label>
+
+        <p class="signup-text">
+          Already have an account?
+          <span class="signup-link" onclick="backToLogin()">Log in</span>
+        </p>
+
+        <button type="submit" class="button">Sign Up</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Terms & Conditions Modal -->
+  <div class="bg-modal-terms">
+    <div class="modal-content terms-modal">
+      <div class="close">&times;</div>
+      <h2>Terms and Conditions</h2>
+      <p>
+        By using Finizer, you agree to our terms.  
+        Your data will be stored securely and used only for providing financial insights.  
+        Do not share your account credentials.  
+        We reserve the right to update these terms anytime.
+      </p>
+    </div>
+  </div>
+
   <footer>
     © 2025 Finizer. All rights reserved.
   </footer>
 
   <script src="script.js"></script>
 </body>
+
 </html>
