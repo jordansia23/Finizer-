@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($row = $result->fetch_assoc()) {
         if (password_verify($password, $row['password'])) {
-            header("Location: dashboard.html"); // login success
+            header("Location: dashboard.html"); 
             exit();
         } else {
             echo "Invalid password!";

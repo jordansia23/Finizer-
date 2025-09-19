@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost"; 
-$username   = "root";       // your MySQL username (default: root)
-$password   = "";           // your MySQL password (default: empty)
-$database   = "finizer";    // your database name
+$username   = "root";      
+$password   = "";           
+$database   = "finizer";    
 
 $conn = new mysqli($servername, $username, $password, $database);
 

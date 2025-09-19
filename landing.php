@@ -1,18 +1,15 @@
 <?php
-// ---------- Database Connection ----------
-$host = "localhost";      // Change if not localhost
-$user = "root";           // Your MySQL username
-$pass = "";               // Your MySQL password
-$dbname = "finizer";      // Your database name
+$host = "localhost";      
+$user = "root";       
+$pass = "";               
+$dbname = "finizer";      
 
 $conn = new mysqli($host, $user, $pass, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// ---------- Handle Sign Up ----------
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["signup"])) {
     $username = $conn->real_escape_string($_POST["username"]);
     $email = $conn->real_escape_string($_POST["email"]);
@@ -26,7 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["signup"])) {
     }
 }
 
-// ---------- Handle Login ----------
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     $email = $conn->real_escape_string($_POST["email"]);
     $password = $_POST["password"];
@@ -58,7 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Finizer - Smart Personal Finance Assistant</title>
   <link rel="icon" type="image/png" href="tabicon.ico">
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="landing.css">
 </head>
@@ -78,7 +73,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
   <section class="hero fade-in">
     <h1>Welcome to Finizer</h1>
     <p>A smart personal finance assistant that helps you manage, plan, and grow your money smarter with AI-driven insights.</p>
-    <!-- Get Started opens modal -->
     <a href="#" class="btn open-modal">Get Started</a>
   </section>
 
@@ -101,7 +95,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     </div>
   </section>
 
-  <!-- Log In Modal -->
   <div class="bg-modal">
     <div class="modal-content">
       <div class="close">&times;</div>
@@ -118,7 +111,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     </div>
   </div>
 
-  <!-- Sign Up Modal -->
   <div class="bg-modal-signup">
     <div class="modal-content">
       <div class="close">&times;</div>
@@ -142,7 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     </div>
   </div>
 
-  <!-- Terms & Conditions Modal -->
   <div class="bg-modal-terms">
     <div class="modal-content terms-modal">
       <div class="close">&times;</div>

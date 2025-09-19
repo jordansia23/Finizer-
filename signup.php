@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sss", $username, $email, $password);
 
     if ($stmt->execute()) {
-        header("Location: dashboard.html"); // redirect on success
+        header("Location: dashboard.html"); 
         exit();
     } else {
         echo "Error: " . $stmt->error;
