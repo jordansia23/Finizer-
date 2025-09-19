@@ -10,6 +10,7 @@ window.addEventListener('scroll', () => {
   });
 });
 
+
 // Open login modal
 document.querySelector('.open-modal').addEventListener('click', e => {
   e.preventDefault();
