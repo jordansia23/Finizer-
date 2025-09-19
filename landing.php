@@ -1,8 +1,8 @@
 <?php
 
-$host = "127.0.0.1:4306";
+$host = "localhost";
 $user = "root";
-$pass = ""; // default blank sa XAMPP
+$pass = ""; 
 $dbname = "finizer";
 
 $conn = new mysqli($host, $user, $pass, $dbname);
