@@ -1,11 +1,10 @@
 <?php
-$host = "127.0.0.1";      
-$user = "root";       
-$pass = "";               
-$dbname = "finizer";      
+/* $host = "localhost";
+$user = "root";
+$pass = ""; // default blank sa XAMPP
+$dbname = "finizer";
 
 $conn = new mysqli($host, $user, $pass, $dbname);
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -44,8 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     } else {
         echo "<script>alert('No account found with this email.');</script>";
     }
-}
-?>
+} */
+?> 
 <!DOCTYPE html>
 <html lang="en">
 
