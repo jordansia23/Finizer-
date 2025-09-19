@@ -1,5 +1,5 @@
 <?php
-/* $host = "localhost";
+ $host = "127.0.0.1:4306";
 $user = "root";
 $pass = ""; // default blank sa XAMPP
 $dbname = "finizer";
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     } else {
         echo "<script>alert('No account found with this email.');</script>";
     }
-} */
+}
 ?> 
 <!DOCTYPE html>
 <html lang="en">
