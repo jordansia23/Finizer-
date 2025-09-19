@@ -1,3 +1,55 @@
+<?php
+// ---------- Database Connection ----------
+$host = "localhost";      // Change if not localhost
+$user = "root";           // Your MySQL username
+$pass = "";               // Your MySQL password
+$dbname = "finizer";      // Your database name
+
+$conn = new mysqli($host, $user, $pass, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// ---------- Handle Sign Up ----------
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["signup"])) {
+    $username = $conn->real_escape_string($_POST["username"]);
+    $email = $conn->real_escape_string($_POST["email"]);
+    $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO usertable (username, email, password) VALUES ('$username', '$email', '$password')";
+    if ($conn->query($sql) === TRUE) {
+        echo "<script>alert('Sign up successful! You can now log in.');</script>";
+    } else {
+        echo "Error: " . $conn->error;
+    }
+}
+
+// ---------- Handle Login ----------
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
+    $email = $conn->real_escape_string($_POST["email"]);
+    $password = $_POST["password"];
+
+    $sql = "SELECT * FROM usertable WHERE email='$email'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if (password_verify($password, $row["password"])) {
+            session_start();
+            $_SESSION["uid"] = $row["uid"];
+            $_SESSION["username"] = $row["username"];
+            header("Location: dashboard.php");
+            exit();
+        } else {
+            echo "<script>alert('Incorrect password!');</script>";
+        }
+    } else {
+        echo "<script>alert('No account found with this email.');</script>";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -54,16 +106,14 @@
     <div class="modal-content">
       <div class="close">&times;</div>
       <img src="finizer name.png" alt="Finizer Logo">
-      <form action="">
-        <input type="email" placeholder="Email" required>
-        <input type="password" placeholder="Password" required>
+      <form method="POST" action="">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
         <p class="signup-text">
           Don't have an account yet?
           <span class="signup-link" onclick="openSignupModal()">Sign up</span>
         </p>
-       <button type="button" class="button" onclick="window.location.href='dashboard.html'">
-  Login
-</button>
+        <button type="submit" name="login" class="button">Login</button>
       </form>
     </div>
   </div>
@@ -73,13 +123,13 @@
     <div class="modal-content">
       <div class="close">&times;</div>
       <img src="finizer name.png" alt="Finizer Logo">
-      <form id="signupForm">
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="password" placeholder="Password" required>
+      <form method="POST" action="">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
 
         <label class="terms-label">
-          <input type="checkbox" id="terms" required>
+          <input type="checkbox" name="terms" required>
           <span>I agree with the <span class="terms-link" onclick="openTermsModal()">Terms and Conditions</span></span>
         </label>
 
@@ -87,7 +137,7 @@
           Already have an account?
           <span class="signup-link" onclick="backToLogin()">Log in</span>
         </p>
-        <button class="button" onclick="window.location.href='dashboard.html'">Sign Up</button>
+        <button type="submit" name="signup" class="button">Sign Up</button>
       </form>
     </div>
   </div>
