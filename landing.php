@@ -1,11 +1,11 @@
 <?php
-$host = "localhost";      
-$user = "root";       
-$pass = "";               
-$dbname = "finizer";      
+
+$host = "127.0.0.1:4306";
+$user = "root";
+$pass = ""; // default blank sa XAMPP
+$dbname = "finizer";
 
 $conn = new mysqli($host, $user, $pass, $dbname);
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
         echo "<script>alert('No account found with this email.');</script>";
     }
 }
-?>
+?> 
 <!DOCTYPE html>
 <html lang="en">
 
@@ -151,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     © 2025 Finizer. All rights reserved.
   </footer>
 
-  <script src="script.js"></script>
+  <script src="landing.js"></script>
 </body>
 
 </html>
