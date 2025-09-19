@@ -53,7 +53,7 @@
     </button>
 
     <!-- Spending -->
-    <button class="icon" data-app="spending" aria-label="Spending">
+    <button class="icon" data-app="spending" aria-label="Daily Spending">
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F5B942" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="2" y="5" width="20" height="14" rx="2"/>
         <line x1="2" y1="10" x2="22" y2="10"/>
@@ -70,16 +70,19 @@
       </svg>
     </button>
 
-    <!-- Assistant -->
-    <button class="icon" data-app="assistant" aria-label="Assistant">
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="34" viewBox="0 0 24 24" fill="none" stroke="#F5B942" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="7" width="18" height="12" rx="4"/>
-        <circle cx="8.5" cy="13" r="1.5" fill="#F5B942"/>
-        <circle cx="15.5" cy="13" r="1.5" fill="#F5B942"/>
-        <line x1="12" y1="3" x2="12" y2="7"/>
-      </svg>
-    </button>
   </div>
+
+  <!-- Assistant Floating Button -->
+<div class="assistant-float" id="assistant">
+  <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#F5B942" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="7" width="18" height="12" rx="4"/>
+    <circle cx="8.5" cy="13" r="1.5" fill="#F5B942"/>
+    <circle cx="15.5" cy="13" r="1.5" fill="#F5B942"/>
+    <line x1="12" y1="3" x2="12" y2="7"/>
+  </svg>
+</div> 
+
+
 
   <script src="script.js"></script>
 </body>
