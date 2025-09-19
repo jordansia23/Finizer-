@@ -150,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     © 2025 Finizer. All rights reserved.
   </footer>
 
-  <script src="script.js"></script>
+  <script src="landing.js"></script>
 </body>
 
 </html>
