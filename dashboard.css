@@ -1,19 +1,19 @@
 :root {
   --primary: #F5B942;
-   --background: url("dashboard bg.gif"); 
+  --background: url("dashboard bg.gif"); 
   --text: #ffffff;
   --muted: #aaaaaa;
 }
 
 body {
-   background: var(--background) no-repeat center center fixed;
+  background: var(--background) no-repeat center center fixed;
   background-size: cover;
-    margin: 0;
+  margin: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column; /* vertical layout */
   /* background: #070606; */
-    color: var(--text);
+  color: var(--text);
   
 }
 * {
@@ -36,14 +36,12 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 20px 10%;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.521);
 }
 .brand img {
   height: 50px;
 }  
-.brand img {
-  height: 50px;
-}
+
 nav a {
   color: var(--text);
   margin: 0 15px;
@@ -56,17 +54,27 @@ nav a:hover {
 } 
 
 .dock {
-    display: flex;
+  display: flex;
   gap: 30px;
   padding: 12px 20px;
-  background: rgba(18, 18, 18, 0.9);
+  background: rgba(18, 18, 18, 0.021);
   border-radius: 16px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 20px rgb(36, 35, 35);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 10px rgb(36, 35, 35);
   justify-content: center;
-
   margin: 20px auto;   /* center horizontally + keep compact */
 }
+
+.icon{
+  width: 32px;
+  height: 30px;
+  stroke: #F5B942;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
 .assistant-float {
   position: fixed;
   bottom: 20px;
