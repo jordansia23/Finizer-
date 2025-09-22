@@ -18,6 +18,69 @@
     </nav>
   </header>
 
+     <!-- ===== DASHBOARD MAIN CONTAINER ===== -->
+  <main class="dashboard-container">
+    <h2 class="dashboard-title">Dashboard</h2>
+
+    <!-- ===== DASHBOARD CARDS GRID ===== -->
+    <div class="dashboard-cards">
+      
+      <!-- Total Balance Card -->
+      <div class="card">
+        <h3>Total Balance</h3>
+        <p class="amount">₱65,180.00</p>
+      </div>
+
+      <!-- This Month Spend Card -->
+      <div class="card">
+        <h3>This Month Spend</h3>
+        <p class="amount">₱15,260.00</p>
+      </div>
+
+      <!-- Upcoming Bills Card -->
+      <div class="card">
+        <h3>Upcoming Bills</h3>
+        <p class="info">4 due</p>
+      </div>
+
+      <!-- Savings Progress Card -->
+      <div class="card">
+        <h3>Savings Progress</h3>
+        <p class="progress">54%</p>
+      </div>
+
+      <!-- Spending by Category Card -->
+      <div class="card">
+        <h3>Spending by Category</h3>
+        <canvas id="spendingChart"></canvas>
+      </div>
+
+      <!-- Reminders Card -->
+      <div class="card reminders">
+        <h3>Reminders</h3>
+        
+        <!-- Reminder 1 -->
+        <div class="reminder">
+          <p><strong>Electricity</strong><br>Due Aug 30 – ₱9,245.00</p>
+          <button>Mark Paid</button>
+        </div>
+        
+        <!-- Reminder 2 -->
+        <div class="reminder">
+          <p><strong>Water</strong><br>Due Aug 28 – ₱856.00</p>
+          <button>Mark Paid</button>
+        </div>
+        
+        <!-- Reminder 3 -->
+        <div class="reminder">
+          <p><strong>Internet</strong><br>Due Aug 25 – ₱1,200.00</p>
+          <button>Mark Paid</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
   <main class="main">
     <!-- dito yung main content mo; pwede mong palitan o lagyan ng sections -->
     

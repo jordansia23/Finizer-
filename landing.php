@@ -1,5 +1,5 @@
 <?php
- $host = "localhost";
+ $host = "127.0.0.1:4306";
 $user = "root";
 $pass = ""; // default blank sa XAMPP
 $dbname = "finizer";

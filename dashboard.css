@@ -15,12 +15,13 @@ body {
   /* background: #070606; */
   color: var(--text);
   
+  
 }
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 .main {
@@ -166,5 +167,103 @@ nav a:hover {
   .icon::after {
     bottom: 45px; 
     font-size: 10px;
+  }
+}
+
+/* ===== DASHBOARD CONTAINER ===== */
+.dashboard-container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 1px;
+  text-align: center;
+}
+
+.dashboard-title {
+  color: #F5B942;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* ===== CARDS GRID LAYOUT ===== */
+.dashboard-cards {
+ display: grid;
+  grid-template-columns: 1fr; /* default phone view */
+  gap: 20px;
+}
+
+/* ===== GLASSMORPHISM CARD STYLE ===== */
+.card {
+  background: rgba(255, 255, 255, 0.08);      /* semi-transparent glass effect */
+  backdrop-filter: blur(12px);                /* blur for glass look */
+  border-radius: 20px;                        /* rounded corners */
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: left;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+.card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #fff;
+}
+
+/* Text inside cards */
+.card .amount {
+  color: #F5B942;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.card .info,
+.card .progress {
+  font-size: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #ddd;
+}
+
+/* ===== REMINDERS INSIDE CARD ===== */
+.reminders .reminder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 12px;
+  margin: 10px 0;
+}
+
+.reminders button {
+  background: #F5B942;
+  color: #000;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.reminders button:hover {
+  background: #ffcc4d;
+}
+
+@media (min-width: 768px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(2, 1fr); /* tablet view */
+  }
+}
+
+@media (min-width: 1200px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(3, 1fr); /* desktop view */
   }
 }
