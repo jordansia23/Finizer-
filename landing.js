@@ -10,7 +10,6 @@ window.addEventListener('scroll', () => {
   });
 });
 
-
 // Open login modal
 document.querySelector('.open-modal').addEventListener('click', e => {
   e.preventDefault();
@@ -76,3 +75,13 @@ document.getElementById("signupForm").addEventListener("submit", function (e) {
     alert("You clicked " + btn.dataset.app);
   });
 }); */
+// Smooth scroll for header links
+document.querySelectorAll('header a').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    if (this.getAttribute('href').startsWith('#')) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});

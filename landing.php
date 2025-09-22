@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     </div>
     <nav>
       <a href="#">Features</a>
-      <a href="#">About</a>
+      <a href="#">About Us</a>
       <a href="#">Contact</a>
     </nav>
   </header>
@@ -73,25 +73,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
   <section class="hero fade-in">
     <h1>Welcome to Finizer</h1>
     <p>A smart personal finance assistant that helps you manage, plan, and grow your money smarter with AI-driven insights.</p>
+    <p></p>
     <a href="#" class="btn open-modal">Get Started</a>
   </section>
 
+  <h1>Features</h1>
   <section class="features">
     <div class="feature fade-in">
       <h3>💡 Smart Insights</h3>
       <p>Get personalized tips to improve your financial habits.</p>
+      <img class="Fimg" src="Ft1.png">
     </div>
     <div class="feature fade-in">
       <h3>📊 Expense Tracking</h3>
       <p>Track your spending in real-time with easy visualization.</p>
+      <img class="Fimg" src="Ft2.png">
     </div>
     <div class="feature fade-in">
       <h3>🎯 Goal Setting</h3>
       <p>Set financial goals and achieve them with guided planning.</p>
+      <img class="Fimg" src="Ft3.png">
     </div>
     <div class="feature fade-in">
       <h3>🔒 Secure & Private</h3>
-      <p>Your financial data is always safe and protected.</p>
+      <p>Your financial data is always secured and protected.</p>
+      <img class="Fimg" src="Ft4.png">
+    </div>
+  </section>
+
+  <section class="hero fade-in">
+    <h1>About Us</h1>
+    <p>Finizer is a personal finance assistant designed to help users organize their money with ease. It offers smart reminders, savings and bill tracking, and a clean dashboard that shows financial status at a glance. Whether you're a student, employee, or entrepreneur, Finizer simplifies budgeting and reduces financial stress through intuitive tools and secure cloud storage.</p>
+    <p></p>
+  </section>
+
+  <h1>Meet the Creators</h1>
+  <section class="features">
+    <div class="feature fade-in">
+      <img class="Crtri" src="creator.png">
+      <h2>Nhia Solis</h2>
+      <p>Serves as the project overseer, coordinating team activities and assigning tasks to ensure balanced workload distribution.</p>
+    </div>
+    <div class="feature fade-in">
+      <img class="Crtri" src="creator.png">
+      <h2>Nash Clemente</h2>
+      <p>Responsible for coding system design and interface and leads the document formatting.</p>
+    </div>
+    <div class="feature fade-in">
+      <img class="Crtri" src="creator.png">
+      <h2>Jordan Sia</h2>
+      <p class="descr">Leads the main database coding efforts and assists in drafting technical documentation.</p>
+    </div>
+  </section>
+
+  <h1>Contact</h1>
+  <section class="features">
+    <div class="feature fade-in">
+      <h3>✉️ Email Support</h3>
+      <p>Reach us directly for inquiries and support: finizer.team@gmail.com</p>
+    </div>
+    <div class="feature fade-in">
+      <h3>📱 Social Media</h3>
+      <p>Reach us directly for inquiries and support: finizer.team@gmail.com</p>
+    </div>
+    <div class="feature fade-in">
+      <h3>📍 Location</h3>
+      <p>Colegio San Agustin-Biñan, Laguna, Philippines</p>
     </div>
   </section>
 
@@ -119,12 +166,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
         <input type="text" name="username" placeholder="Username" required>
         <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Password" required>
-
         <label class="terms-label">
           <input type="checkbox" name="terms" required>
           <span>I agree with the <span class="terms-link" onclick="openTermsModal()">Terms and Conditions</span></span>
         </label>
-
         <p class="signup-text">
           Already have an account?
           <span class="signup-link" onclick="backToLogin()">Log in</span>
@@ -147,11 +192,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     </div>
   </div>
 
-  <footer>
+  <footer class="footer">
     © 2025 Finizer. All rights reserved.
   </footer>
 
-  <script src="landing.js"></script>
+<script src="landing.js"></script>
 </body>
 
 </html>

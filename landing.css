@@ -48,13 +48,13 @@ nav a:hover {
   padding: 80px 10%;
 }
 .hero h1 {
-  font-size: 3rem;
+  font-size: 4rem;
   color: var(--primary);
 }
 .hero p {
   margin: 20px 0;
   color: var(--muted);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
 }
 .btn {
   background: var(--primary);
@@ -71,41 +71,72 @@ nav a:hover {
   transform: scale(1.05);
 }
 
+h1 {
+  font-size: 3rem;
+  color: var(--primary);
+  text-align: center;
+}
 /* FEATURES */
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 30px;
   padding: 60px 5%;
+  align-items: start;  /* <- only the hovered card grows */
 }
 .feature {
-  background: rgba(255,255,255,0.05);
-  border-radius: 15px;
+  background: rgba(18, 18, 18, 0.021);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 10px rgb(36, 35, 35);
+  border-radius: 16px;
   padding: 30px;
   text-align: center;
-  transition: 0.3s;
+  transition: transform 0.3s ease, background 0.3s ease;
+  position: relative;
+}
+.feature .Fimg {
+  display: none;       /* won't take space */
+  width: 100%;
+  height: auto;        /* keeps proportions */
+  margin-top: 30px;    /* spacing when shown */
+  border-radius: 20px;
 }
 .feature h3 {
   color: var(--primary);
 }
-.feature:hover {
-  transform: translateY(-20px);
+.feature:hover{
+  transform: scale(1.05);  /* only hovered card grows */
   background: rgba(255,255,255,0.1);
+  z-index: 2; /* bring above neighbors */
+}
+.feature:hover .Fimg {
+  display: block;      /* takes space only when visible */
+  animation: fadeIn 0.6s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.feature .Crtri {
+  width: 80%;
+  height: auto;        /* keeps proportions */  /* spacing when shown */
+  border-radius: 20px;
 }
 
 /* FOOTER */
-footer {
-  text-align: center;
+.footer {
+  width: 100%;                 /* take full width */
+  margin: 0 auto;               /* center inside parent */
+  text-align: center;           /* center text */
   padding: 20px;
   border-top: 1px solid rgba(255,255,255,0.1);
   font-size: 0.9rem;
-  color: var(--muted);
+  color: var(--primary);
+  display: block;               /* make sure it's block-level */
 }
 
 /* MODALS */
-.bg-modal,
-.bg-modal-signup,
-.bg-modal-terms {
+.bg-modal, .bg-modal-signup, .bg-modal-terms {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.85);
@@ -254,3 +285,5 @@ footer {
 .bg-modal-terms h2 {
   color: var(--primary);
 }
+
+
