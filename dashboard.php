@@ -9,14 +9,41 @@
   <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Popup Profile Menu</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
   <header>
     <div class="brand">
       <img src="name.png" alt="Finizer Logo">
     </div>
     <nav>
-      <a href="#">Logout</a>
+      <div class="profile-menu">
+        <button id="profileBtn">
+          <img src="user.webp" alt="User Profile" class="profile-icon">
+        </button>
+        <div class="profile-popup" id="profilePopup">
+        
+          <!-- Upload input -->
+          <img id="previewImg" src="user.webp" alt="Preview" class="preview-img">   
+          
+          <label for="profileUpload" class="upload-label">Change Photo</label>
+          <input type="file" id="profileUpload" accept="image/*" style="display:none">
+
+          <p><strong>Username:</strong> Jordan</p>
+          <p><strong>Email:</strong> jordansia@email.com</p>
+
+          <button class="logout-btn">Logout</button>
+        </div>
+      </div>
     </nav>
   </header>
+     <div class="popup-overlay" id="popupOverlay"></div>
 
      <!-- ===== DASHBOARD MAIN CONTAINER ===== -->
   <main class="dashboard-container">

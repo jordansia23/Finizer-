@@ -267,3 +267,108 @@ nav a:hover {
     grid-template-columns: repeat(3, 1fr); /* desktop view */
   }
 }
+
+/* Profile Menu */
+.profile-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-icon {
+  width: 50px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#profileBtn {
+  background: transparent;
+  border: 2px solid #F5B942;
+  padding: 0;
+}
+
+/* Popup */
+.profile-popup {
+  display: none; /* hidden by default */
+  position: fixed; /* fixed at center of screen */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* center exactly */
+  background: rgba(0, 0, 0, 0.95);
+  padding: 35px 30px;
+  border-radius: 15px;
+  width: 380px;
+    min-height: 300px; /* sets minimum height */
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; /* iOS-like font */
+  color: #fff;
+}
+
+/* Overlay behind popup */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 15, 15, 0.95);
+  z-index: 900;
+}
+
+/* Popup text */
+.profile-popup p {
+  margin: 5px 0;
+  transform: translateY(15px); /* moves text down visually */
+  font-size: 15px;
+  font-weight: 400;
+  color: #fff;
+  line-height: 2;
+}
+
+/* Logout button */
+.logout-btn {
+  margin-top: 40px;
+  width: 100%;
+  background: #F5B942;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.logout-btn:hover {
+  background: #e0a825; /* slightly darker on hover */
+  transform: translateY(-1px);
+}
+
+/* Profile image preview */
+.preview-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 1px auto 5px auto;
+  display: block;
+  object-fit: cover;
+  border: 2px solid #F5B942; /* subtle highlight */
+}
+
+/* Upload label */
+.upload-label {
+  display: inline-block;
+  margin-top: 2px;
+  cursor: pointer;
+  color: #F5B942;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.upload-label:hover {
+  color: #e0a825;
+}
