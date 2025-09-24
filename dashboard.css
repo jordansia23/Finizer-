@@ -275,16 +275,24 @@ nav a:hover {
 }
 
 .profile-icon {
-  width: 50px;
-  height: 45px;
+   width: 60px;
+  height: 60px;
   border-radius: 50%;
+  object-fit: cover; /* crops image nicely */
   cursor: pointer;
 }
 
 #profileBtn {
-  background: transparent;
+    background: transparent;
   border: 2px solid #F5B942;
+  border-radius: 50%;     /* makes it circular */
+  width: 65px;            /* same width */
+  height: 65px;           /* same height */
   padding: 0;
+  display: flex;
+  align-items: center;    /* centers image vertically */
+  justify-content: center;/* centers image horizontally */
+  overflow: hidden;       /* ensures image won't spill out */
 }
 
 /* Popup */

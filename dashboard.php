@@ -115,20 +115,20 @@
 
   <div class="dock">
     <!-- Dashboard -->
-    <button class="icon" data-app="dashboard" aria-label="Dashboard">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox= "0 0 24 24">
-        <path d="M3 11L12 3l9 8v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z"/>
-        <path d="M9 22V12h6v10"/>
-      </svg>
-    </button>
+  <a href="dashboard.php" class="icon" aria-label="Dashboard">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M3 11L12 3l9 8v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z"/>
+      <path d="M9 22V12h6v10"/>
+    </svg>
+  </a>
 
     <!-- Savings -->
-    <button class="icon" data-app="savings" aria-label="Savings">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox= "0 0 24 24">
-        <path d="M20 13v-2a8 8 0 0 0-16 0v2a8 8 0 0 0 16 0z"/>
-        <circle cx="12" cy="9" r="1.5" fill="#F5B942"/>
-      </svg>
-    </button>
+     <a href="savings.php" class="icon" aria-label="Savings">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M20 13v-2a8 8 0 0 0-16 0v2a8 8 0 0 0 16 0z"/>
+      <circle cx="12" cy="9" r="1.5" fill="#F5B942"/>
+    </svg>
+  </a>
 
     <!-- Bills -->
     <button class="icon" data-app="bills" aria-label="Bills">
