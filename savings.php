@@ -13,41 +13,39 @@
     </div>
    </header>
 
-  <h1>Savings</h1>
-  <div class="savings-container">
-    <div class="card">
-      <h2>Emergency Fund</h2>
-      <div class="progress"><div class="progress-fill" style="width: 41%;"></div></div>
-      <div class="percentage">41%</div>
-      <div class="amount">₱10,250.00 / ₱25,000.00</div>
-      <div class="btn-group">
-        <button class="btn btn-add">Add</button>
-        <button class="btn btn-details">Details</button>
+   <!-- Popup Modal -->
+<div class="popup-overlay" id="popup">
+  <div class="popup-content">
+    <h2>Add Savings Goal</h2>
+    <form id="savingsForm">
+      <input type="text" id="goalName" placeholder="Goal name (e.g. Laptop)" required>
+      <input type="number" id="goalTarget" placeholder="Target Amount (₱)" required>
+      <input type="number" id="goalSaved" placeholder="Already Saved (₱)" required>
+      <div class="popup-buttons">
+        <button type="submit" class="btn btn-add">Save</button>
+        <button type="button" class="btn btn-details" id="closePopup">Cancel</button>
       </div>
-    </div>
-
-    <div class="card">
-      <h2>New PC</h2>
-      <div class="progress"><div class="progress-fill" style="width: 31%;"></div></div>
-      <div class="percentage">31%</div>
-      <div class="amount">₱17,671.00 / ₱57,078.00</div>
-      <div class="btn-group">
-        <button class="btn btn-add">Add</button>
-        <button class="btn btn-details">Details</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Travel Fund</h2>
-      <div class="progress"><div class="progress-fill" style="width: 41%;"></div></div>
-      <div class="percentage">41%</div>
-      <div class="amount">₱6,432.00 / ₱15,000.00</div>
-      <div class="btn-group">
-        <button class="btn btn-add">Add</button>
-        <button class="btn btn-details">Details</button>
-      </div>
-    </div>
+    </form>
   </div>
+</div>
+
+<!-- Update Popup -->
+<div class="popup-overlay" id="updatePopup">
+  <div class="popup-content">
+    <h2>Update Savings</h2>
+    <form id="updateForm">
+      <input type="number" id="updateAmount" placeholder="Enter Amount (₱)" required>
+      <div class="popup-buttons">
+        <button type="submit" class="btn btn-add" id="depositBtn">Deposit</button>
+        <button type="submit" class="btn btn-details" id="withdrawBtn">Withdraw</button>
+        <button type="button" class="btn btn-details" id="closeUpdatePopup">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+  <div class="savings-container"></div>
 
   <!-- Floating Add Button -->
   <button class="floating-btn">＋</button>

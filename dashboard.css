@@ -55,6 +55,10 @@ nav a:hover {
 } 
 
 .dock {
+  position: fixed;         /* stay at bottom */
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: 30px;
   padding: 12px 20px;
@@ -63,10 +67,27 @@ nav a:hover {
   backdrop-filter: blur(4px);
   box-shadow: 0 0 10px rgb(36, 35, 35);
   justify-content: center;
-  margin: 20px auto;   /* center horizontally + keep compact */
+  z-index: 1000;
 }
 
-.icon{
+/* Wrapper (button/link) */
+.icon {
+ width: 55px;             /* fixed size  */
+  height: 55px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #F5B942;
+  transition: transform 0.1s, color 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;      /* optional, to look clean */
+}
+
+/* SVG mismo */
+.icon svg {
   width: 32px;
   height: 30px;
   stroke: #F5B942;
@@ -76,44 +97,18 @@ nav a:hover {
   fill: none;
 }
 
-.assistant-float {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 65px;
-  height: 65px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  z-index: 9999;
-  backdrop-filter: blur(6px);
-  border-radius: 30px;
-}
-
-.assistant-float:hover {
-  transform: scale(1.15);
-}
-
-
-.icon{
-  font-size: 23px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #F5B942;
-  transition: transform 0.1s, color 0.2s;
-}
-
+/* Hover effect */
 .icon:hover {
   transform: scale(1.4) translateY(-10px);
-  color: #F5B942; /* brighter gold */
+  color: #F5B942;
   text-shadow: 0 0 10px #F5B942;
 }
+
+/* Tooltip */
 .icon::after {
-  content: attr(aria-label); /* kunin yung label galing sa attribute */
+  content: attr(aria-label);
   position: absolute;
-  bottom: 60px; /* layo sa icon */
+  bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.85);
@@ -136,17 +131,18 @@ nav a:hover {
 /* 📱 Tablet view */
 @media (max-width: 768px) {
   .dock {
-    width: 70%;             /* mas malapad sa tablet */
-    gap: 20px;              /* mas maliit na pagitan */
+    width: 70%;
+    gap: 20px;
     padding: 10px 15px;
   }
 
-  .icon {
-    font-size: 20px;        /* lumiit ng konti yung icons */
+  .icon svg {
+    width: 28px;
+    height: 26px;
   }
 
   .icon::after {
-    bottom: 50px;           /* ayusin position ng label */
+    bottom: 50px;
     font-size: 11px;
   }
 }
@@ -154,18 +150,19 @@ nav a:hover {
 /* 📱 Phone view */
 @media (max-width: 480px) {
   .dock {
-    width: 90%;             /* halos full width */
+    width: 90%;
     gap: 15px;
     padding: 8px 12px;
-    flex-wrap: wrap;        /* bumabalot yung icons kapag di kasya */
+    flex-wrap: wrap;
   }
 
-  .icon {
-    font-size: 18px;        /* mas maliit ulit icons */
+  .icon svg {
+    width: 24px;
+    height: 22px;
   }
 
   .icon::after {
-    bottom: 45px; 
+    bottom: 45px;
     font-size: 10px;
   }
 }

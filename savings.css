@@ -42,20 +42,39 @@ h1 {
  /* menu nav*/
 
 .dock {
+  position: fixed;         /* stay at bottom */
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: 30px;
   padding: 12px 20px;
-  background: rgba(18, 18, 18, 0.25);
+  background: rgba(18, 18, 18, 0.021);
   border-radius: 16px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 10px rgb(36, 35, 35);
   justify-content: center;
-  margin: 240px auto 20px auto; /* nasa ilalim pero may space */
-  max-width: 90%; /* para responsive */
-
+  z-index: 1000;
 }
 
-.icon{
+/* Wrapper (button/link) */
+.icon {
+ width: 55px;             /* fixed size  */
+  height: 55px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #F5B942;
+  transition: transform 0.1s, color 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;      /* optional, to look clean */
+}
+
+/* SVG mismo */
+.icon svg {
   width: 32px;
   height: 30px;
   stroke: #F5B942;
@@ -65,44 +84,18 @@ h1 {
   fill: none;
 }
 
-.assistant-float {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 65px;
-  height: 65px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  z-index: 9999;
-  backdrop-filter: blur(6px);
-  border-radius: 30px;
-}
-
-.assistant-float:hover {
-  transform: scale(1.15);
-}
-
-
-.icon{
-  font-size: 23px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #F5B942;
-  transition: transform 0.1s, color 0.2s;
-}
-
+/* Hover effect */
 .icon:hover {
   transform: scale(1.4) translateY(-10px);
-  color: #F5B942; /* brighter gold */
+  color: #F5B942;
   text-shadow: 0 0 10px #F5B942;
 }
+
+/* Tooltip */
 .icon::after {
-  content: attr(aria-label); /* kunin yung label galing sa attribute */
+  content: attr(aria-label);
   position: absolute;
-  bottom: 60px; /* layo sa icon */
+  bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.85);
@@ -125,17 +118,18 @@ h1 {
 /* 📱 Tablet view */
 @media (max-width: 768px) {
   .dock {
-    width: 70%;             /* mas malapad sa tablet */
-    gap: 20px;              /* mas maliit na pagitan */
+    width: 70%;
+    gap: 20px;
     padding: 10px 15px;
   }
 
-  .icon {
-    font-size: 20px;        /* lumiit ng konti yung icons */
+  .icon svg {
+    width: 28px;
+    height: 26px;
   }
 
   .icon::after {
-    bottom: 50px;           /* ayusin position ng label */
+    bottom: 50px;
     font-size: 11px;
   }
 }
@@ -143,20 +137,30 @@ h1 {
 /* 📱 Phone view */
 @media (max-width: 480px) {
   .dock {
-    width: 90%;             /* halos full width */
+    width: 90%;
     gap: 15px;
     padding: 8px 12px;
-    flex-wrap: wrap;        /* bumabalot yung icons kapag di kasya */
+    flex-wrap: wrap;
   }
 
-  .icon {
-    font-size: 18px;        /* mas maliit ulit icons */
+  .icon svg {
+    width: 24px;
+    height: 22px;
   }
 
   .icon::after {
-    bottom: 45px; 
+    bottom: 45px;
     font-size: 10px;
   }
+}
+
+
+/* ===== DASHBOARD CONTAINER ===== */
+.dashboard-container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 1px;
+  text-align: center;
 }
 
 .savings-container {
@@ -280,4 +284,49 @@ h1 {
   .card h2 {
     font-size: 1rem;
   }
+}
+
+/* Popup Overlay */
+.popup-overlay {
+ display: none; /* default hidden */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Popup Content */
+.popup-content {
+  background: whitesmoke;
+  padding: 20px;
+  border-radius: 12px;
+  width: 350px;
+  max-width: 90%;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+.popup-content h2 {
+  margin-bottom: 15px;
+  color: var(--primary);
+}
+
+.popup-content input {
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
 }
