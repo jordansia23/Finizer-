@@ -13,7 +13,7 @@
     </div>
    </header>
 
-   <!-- Popup Modal -->
+   <!-- Add Goal Popup -->
 <div class="popup-overlay" id="popup">
   <div class="popup-content">
     <h2>Add Savings Goal</h2>
@@ -44,21 +44,19 @@
   </div>
 </div>
 
-
-  <div class="savings-container"></div>
+  <div class="savings-container" id="goalsContainer"></div>
 
   <!-- Floating Add Button -->
-  <button class="floating-btn">＋</button>
+  <button class="floating-btn" id="addGoalBtn">＋</button>
   
-
    <div class="dock">
     <!-- Dashboard -->
     <a href="dashboard.php" class="icon" aria-label="Dashboard">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M3 11L12 3l9 8v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z"/>
-      <path d="M9 22V12h6v10"/>
-    </svg>
-  </a>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M3 11L12 3l9 8v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z"/>
+        <path d="M9 22V12h6v10"/>
+      </svg>
+    </a>
 
     <!-- Savings -->
     <button class="icon" data-app="savings" aria-label="Savings">
@@ -97,7 +95,25 @@
     </button>
   </div>
 
+  <!-- detail popup -->
+<div id="detailsPopup" class="details-popup">
+  <div class="details-content">
+     <button class="close-btn" id="closeDetailsBtn">×</button>
+    <h2 id="goalNameDisplay">Goal Details</h2>
 
+    <!-- Change Goal Name -->
+    <div class="edit-section">
+      <input type="text" id="goalNameEdit" placeholder="Enter new goal name">
+      <button id="saveGoalNameBtn">Save</button>
+    </div>
+
+    <!-- Delete Goal -->
+    <button id="deleteGoalBtn" class="delete-btn">Delete Goal</button>
+
+    <!-- History -->
+    <h3>History</h3>
+    <div class="history-list" id="historyList"></div>
+</div>
 
   <script src="savings.js"></script>
 </body>
