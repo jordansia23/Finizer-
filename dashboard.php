@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard Finizer - Smart Personal Finance Assistant</title>
-  <link rel="icon" type="image/png" href="logo-circle.ico">
+  <title>Dashboard - Finizer</title>
+  <link rel="icon" type="image/png" href="tabicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -38,7 +38,9 @@
           <p><strong>Username:</strong> Jordan</p>
           <p><strong>Email:</strong> jordansia@email.com</p>
 
-          <button class="logout-btn">Logout</button>
+          <button class="logout-btn">
+            <a href="landing.php">Logout</a>
+          </button>
         </div>
       </div>
     </nav>

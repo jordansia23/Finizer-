@@ -1,8 +1,9 @@
 <?php
 
-$host = "127.0.0.1:3307";
+$host = "127.0.0.1:4306";
+$host = "localhost";
 $user = "root";
-$pass = ""; 
+$pass = "";
 $dbname = "finizer";
 
 $conn = new mysqli($host, $user, $pass, $dbname);
@@ -55,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
   <title>Finizer - Smart Personal Finance Assistant</title>
   <link rel="icon" type="image/png" href="tabicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="landing.css">
 </head>
 
@@ -64,9 +66,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
       <img src="name.png" alt="Finizer Logo">
     </div>
     <nav>
-      <a href="#">Features</a>
-      <a href="#">About Us</a>
-      <a href="#">Contact</a>
+      <a href="#features">Features</a>
+      <a href="#about">About Us</a>
+      <a href="#contact">Contact</a>
     </nav>
   </header>
 
@@ -77,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     <a href="#" class="btn open-modal">Get Started</a>
   </section>
 
-  <h1>Features</h1>
+  <h1 id="features">Features</h1>
   <section class="features">
     <div class="feature fade-in">
       <h3>💡 Smart Insights</h3>
@@ -101,40 +103,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     </div>
   </section>
 
-  <section class="hero fade-in">
+  <section class="hero fade-in" id="about">
     <h1>About Us</h1>
     <p>Finizer is a personal finance assistant designed to help users organize their money with ease. It offers smart reminders, savings and bill tracking, and a clean dashboard that shows financial status at a glance. Whether you're a student, employee, or entrepreneur, Finizer simplifies budgeting and reduces financial stress through intuitive tools and secure cloud storage.</p>
     <p></p>
   </section>
 
   <h1>Meet the Creators</h1>
-  <section class="features">
-    <div class="feature fade-in">
-      <img class="Crtri" src="creator.png">
-      <h2>Nhia Solis</h2>
-      <p>Serves as the project overseer, coordinating team activities and assigning tasks to ensure balanced workload distribution.</p>
-    </div>
-    <div class="feature fade-in">
-      <img class="Crtri" src="creator.png">
-      <h2>Nash Clemente</h2>
+  <section class="creators">
+    <div class="creator fade-in">
+      <img class="Crtri" src="nash.png">
+      <h2>Nash Jermaine Clemente</h2>
       <p>Responsible for coding system design and interface and leads the document formatting.</p>
     </div>
-    <div class="feature fade-in">
-      <img class="Crtri" src="creator.png">
-      <h2>Jordan Sia</h2>
+    <div class="creator fade-in">
+      <img class="Crtri" src="nhia.png">
+      <h2>Nhia Leecole Solis</h2>
+      <p>Serves as the project overseer, coordinating team activities and assigning tasks to ensure balanced workload distribution.</p>
+    </div>
+    <div class="creator fade-in">
+      <img class="Crtri" src="jordan.png">
+      <h2>Jordan Alcade Sia</h2>
       <p class="descr">Leads the main database coding efforts and assists in drafting technical documentation.</p>
     </div>
   </section>
 
-  <h1>Contact</h1>
+  <h1 id="contact">Contact Us</h1>
   <section class="features">
     <div class="feature fade-in">
       <h3>✉️ Email Support</h3>
-      <p>Reach us directly for inquiries and support: finizer.team@gmail.com</p>
+      <p>Reach us directly for inquiries:</p>
+        <a href="mailto:finizer.team@gmail.com">finizer.team@gmail.com</a>
     </div>
     <div class="feature fade-in">
       <h3>📱 Social Media</h3>
-      <p>Reach us directly for inquiries and support: finizer.team@gmail.com</p>
+      <p>Follow us here:</p>
+      <a href="https://www.facebook.com/jermaynehhh/" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.instagram.com/jermaynehhh/" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://x.com/jermaynehhh" target="_blank"><i class="fab fa-x-twitter"></i></a>
     </div>
     <div class="feature fade-in">
       <h3>📍 Location</h3>
@@ -179,16 +185,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     </div>
   </div>
 
-  <div class="bg-modal-terms">
+  <!-- TERMS MODAL -->
+  <div class="bg-modal-terms" id="termsModal">
     <div class="modal-content terms-modal">
-      <div class="close">&times;</div>
+      <div class="close" id="closeTerms">&times;</div>
       <h2>Terms and Conditions</h2>
-      <p>
-        By using Finizer, you agree to our terms.  
-        Your data will be stored securely and used only for providing financial insights.  
-        Do not share your account credentials.  
-        We reserve the right to update these terms anytime.
-      </p>
+      <div class="terms-text" style="text-align:left; margin-top:15px;">
+        <p><strong>Effective Date: </strong>October 4, 2025</p>
+
+        <h3>1. Acceptance of Terms</h3>
+        <p>
+          <i>By creating an account or using Finizer, you agree to be bound by these Terms and Conditions, as well as our Privacy Policy. If you do not agree, you must discontinue use immediately.</i>
+        </p>
+
+        <h3>2. Use of Services</h3>
+        <p>
+          • Finizer provides tools for financial tracking and insights.<br>
+          • You agree to use the service only for lawful purposes.<br>
+          • You are responsible for maintaining the confidentiality of your account credentials.<br>
+          • You may not use Finizer to engage in fraudulent, unlawful, or abusive activities.
+        </p>
+
+        <h3>3. Data and Privacy</h3>
+        <p>
+          • Finizer collects and stores data you provide for the purpose of delivering financial insights.<br>
+          • Your data will be stored securely and will not be sold to third parties.<br>
+          • We may analyze anonymized data to improve our services.<br>
+          • For details, see our Privacy Policy.
+        </p>
+
+        <h3>4. Account Responsibilities</h3>
+        <p>
+          • You must provide accurate information when creating an account.<br>
+          • You are responsible for all activity that occurs under your account.<br>
+          • Notify us immediately if you suspect unauthorized use of your account.
+        </p>
+
+        <h3>5. Updates and Modifications</h3>
+        <p>
+          We reserve the right to update, change, or modify these Terms at any time. Continued use of Finizer after changes means you accept the updated Terms.
+        </p>
+
+        <h3>6. Limitation of Liability</h3>
+        <p>
+          Finizer provides financial insights and tools but does not guarantee accuracy, completeness, or fitness for any specific purpose. We are not responsible for losses, damages, or decisions made based on the use of our services.
+        </p>
+
+        <h3>7. Termination</h3>
+        <p>
+          We may suspend or terminate your account if you violate these Terms. You may discontinue use at any time by deleting your account.
+        </p>
+
+        <h3>8. Governing Law</h3>
+        <p>
+          These Terms shall be governed by and interpreted according to the laws of [Insert Country/Region].
+        </p>
+
+        <h3>9. Contact Us</h3>
+        <p>
+          For questions or concerns about these Terms, contact us at: <strong>Email:</strong> support@finizer.com
+        </p>
+      </div>
     </div>
   </div>
 

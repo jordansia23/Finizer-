@@ -96,7 +96,7 @@ depositBtn.onclick = (e) => {
     return;
   }
   activeSaved += val;
-  addHistory("Deposited", val);
+  addHistory("Added", val);
   updateUI();
 };
 
@@ -115,7 +115,7 @@ withdrawBtn.onclick = (e) => {
     return;
   }
   activeSaved -= val;
-  addHistory("Withdrew", val);
+  addHistory("deducted", val);
   updateUI();
 };
 

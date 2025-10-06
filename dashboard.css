@@ -14,8 +14,6 @@ body {
   flex-direction: column; /* vertical layout */
   /* background: #070606; */
   color: var(--text);
-  
-  
 }
 * {
   margin: 0;

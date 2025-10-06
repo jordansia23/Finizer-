@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Finizer Savings</title>
+  <title>Savings - Finizer</title>
+  <link rel="icon" type="image/png" href="tabicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="savings.css">
 </head>
 <body>
@@ -36,8 +38,8 @@
     <form id="updateForm">
       <input type="number" id="updateAmount" placeholder="Enter Amount (₱)" required>
       <div class="popup-buttons">
-        <button type="submit" class="btn btn-add" id="depositBtn">Deposit</button>
-        <button type="submit" class="btn btn-details" id="withdrawBtn">Withdraw</button>
+        <button type="submit" class="btn btn-add" id="depositBtn">Increase</button>
+        <button type="submit" class="btn btn-details" id="withdrawBtn">Decrease</button>
         <button type="button" class="btn btn-details" id="closeUpdatePopup">Cancel</button>
       </div>
     </form>
