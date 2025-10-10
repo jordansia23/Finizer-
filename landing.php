@@ -1,6 +1,6 @@
 <?php
 
-$host = "127.0.0.1:4306";
+$host = "127.0.0.1:3307";
 $host = "localhost";
 $user = "root";
 $pass = "";

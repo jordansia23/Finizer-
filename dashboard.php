@@ -7,15 +7,6 @@
   <link rel="icon" type="image/png" href="tabicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="dashboard.css">
-</head>
-<body>
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Popup Profile Menu</title>
-  <link rel="stylesheet" href="style.css">
-</head>
 <body>
 
   <header>
@@ -78,11 +69,32 @@
         <p class="progress">54%</p>
       </div>
 
-      <!-- Spending by Category Card -->
-      <div class="card">
-        <h3>Spending by Category</h3>
-        <canvas id="spendingChart"></canvas>
-      </div>
+<!-- Spending by Category Card -->
+<div class="card">
+  <h3>Spending by Category</h3>
+  
+  <div class="spending-chart-wrap">
+    <canvas id="spendingChart"></canvas>
+  </div>
+
+  <!-- Custom legend below -->
+  <div class="custom-legend">
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #F5B942;"></span> Food
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #d4a015;"></span> Transport
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #a0780c;"></span> School Expenses
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #6b5505;"></span> Others
+    </div>
+  </div>
+</div>
+
+
 
       <!-- Reminders Card -->
       <div class="card reminders">
@@ -161,7 +173,7 @@
     </button>
   </div>
 
-  <!-- Assistant Floating Button -->
+  <!-- Assistant Floating Button 
 <div class="assistant-float" id="assistant">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <rect x="3" y="7" width="18" height="12" rx="4"/>
@@ -169,10 +181,10 @@
     <circle cx="15.5" cy="13" r="1.5" fill="#F5B942"/>
     <line x1="12" y1="3" x2="12" y2="7"/>
   </svg>
-</div> 
+</div> -->
 
 
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="dashboard.js"></script>
 </body>
 </html>
