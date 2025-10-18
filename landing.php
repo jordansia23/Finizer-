@@ -1,6 +1,6 @@
 <?php
 
-$host = "127.0.0.1:3307";
+$host = "localhost";
 $user = "root";
 $pass = ""; 
 $dbname = "finizer";
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Finizer - Smart Personal Finance Assistant</title>
+  <title>Finizer - Landing page</title>
   <link rel="icon" type="image/png" href="tabicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="landing.css">

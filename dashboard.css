@@ -12,11 +12,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column; /* vertical layout */
-  /* background: #070606; */
   color: var(--text);
-  
-  
 }
+
 * {
   margin: 0;
   padding: 0;
@@ -25,7 +23,7 @@ body {
 }
 
 .main {
-  flex: 1; /* filler space sa gitna */
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,6 +37,7 @@ header {
   padding: 20px 10%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.521);
 }
+
 .brand img {
   height: 50px;
 }  
@@ -55,7 +54,7 @@ nav a:hover {
 } 
 
 .dock {
-  position: fixed;         /* stay at bottom */
+  position: fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
@@ -70,9 +69,8 @@ nav a:hover {
   z-index: 1000;
 }
 
-/* Wrapper (button/link) */
 .icon {
- width: 55px;             /* fixed size  */
+  width: 55px;
   height: 55px;
   background: none;
   border: none;
@@ -83,10 +81,9 @@ nav a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;      /* optional, to look clean */
+  border-radius: 12px;
 }
 
-/* SVG mismo */
 .icon svg {
   width: 32px;
   height: 30px;
@@ -97,14 +94,12 @@ nav a:hover {
   fill: none;
 }
 
-/* Hover effect */
 .icon:hover {
   transform: scale(1.4) translateY(-10px);
   color: #F5B942;
   text-shadow: 0 0 10px #F5B942;
 }
 
-/* Tooltip */
 .icon::after {
   content: attr(aria-label);
   position: absolute;
@@ -128,7 +123,6 @@ nav a:hover {
   transform: translateX(-50%) translateY(-5px);
 }
 
-/* 📱 Tablet view */
 @media (max-width: 768px) {
   .dock {
     width: 70%;
@@ -147,7 +141,6 @@ nav a:hover {
   }
 }
 
-/* 📱 Phone view */
 @media (max-width: 480px) {
   .dock {
     width: 90%;
@@ -167,7 +160,6 @@ nav a:hover {
   }
 }
 
-/* ===== DASHBOARD CONTAINER ===== */
 .dashboard-container {
   max-width: 1100px;
   margin: 30px auto;
@@ -181,18 +173,16 @@ nav a:hover {
   margin-bottom: 20px;
 }
 
-/* ===== CARDS GRID LAYOUT ===== */
 .dashboard-cards {
- display: grid;
-  grid-template-columns: 1fr; /* default phone view */
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 20px;
 }
 
-/* ===== GLASSMORPHISM CARD STYLE ===== */
 .card {
-  background: rgba(255, 255, 255, 0.08);      /* semi-transparent glass effect */
-  backdrop-filter: blur(12px);                /* blur for glass look */
-  border-radius: 20px;                        /* rounded corners */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
   padding: 20px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
@@ -208,26 +198,21 @@ nav a:hover {
 .card h3 {
   font-size: 1.2rem;
   margin-bottom: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: #fff;
 }
 
-/* Text inside cards */
 .card .amount {
   color: #F5B942;
   font-size: 1.5rem;
   font-weight: bold;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 .card .info,
 .card .progress {
   font-size: 1rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: #ddd;
 }
 
-/* ===== REMINDERS INSIDE CARD ===== */
 .reminders .reminder {
   display: flex;
   justify-content: space-between;
@@ -255,13 +240,13 @@ nav a:hover {
 
 @media (min-width: 768px) {
   .dashboard-cards {
-    grid-template-columns: repeat(2, 1fr); /* tablet view */
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1200px) {
   .dashboard-cards {
-    grid-template-columns: repeat(3, 1fr); /* desktop view */
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -271,47 +256,63 @@ nav a:hover {
   display: inline-block;
 }
 
-.profile-icon {
-   width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover; /* crops image nicely */
-  cursor: pointer;
+.profile-icon,.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* fill without distortion */
+  display: block;      /* remove inline gap */
+  border-radius: 0;    /* ❌ no circle, parent handles it */
 }
 
+/* ---------- Force-profile-button: override conflicts and remove gap ---------- */
 #profileBtn {
-    background: transparent;
-  border: 2px solid #F5B942;
-  border-radius: 50%;     /* makes it circular */
-  width: 65px;            /* same width */
-  height: 65px;           /* same height */
-  padding: 0;
-  display: flex;
-  align-items: center;    /* centers image vertically */
-  justify-content: center;/* centers image horizontally */
-  overflow: hidden;       /* ensures image won't spill out */
+  background: transparent !important;
+  border: 4px solid var(--primary) !important;
+  border-radius: 50% !important;
+  width: 120px !important;      /* change to your desired size */
+  height: 120px !important;     /* keep same as width for perfect circle */
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
 }
+
+/* target the exact img inside the button and force it to completely fill */
+#profileBtn > img.profile-icon {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: 50% !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  transform: translateZ(0); /* GPU hint to avoid subpixel rendering gap */
+}
+
+
 
 /* Popup */
 .profile-popup {
-  display: none; /* hidden by default */
-  position: fixed; /* fixed at center of screen */
+  display: none;
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* center exactly */
+  transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.95);
   padding: 35px 30px;
   border-radius: 15px;
   width: 380px;
-    min-height: 300px; /* sets minimum height */
+  min-height: 300px;
   text-align: center;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
   z-index: 1000;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; /* iOS-like font */
   color: #fff;
 }
 
-/* Overlay behind popup */
 .popup-overlay {
   display: none;
   position: fixed;
@@ -323,17 +324,15 @@ nav a:hover {
   z-index: 900;
 }
 
-/* Popup text */
 .profile-popup p {
   margin: 5px 0;
-  transform: translateY(15px); /* moves text down visually */
+  transform: translateY(15px);
   font-size: 15px;
   font-weight: 400;
   color: #fff;
   line-height: 2;
 }
 
-/* Logout button */
 .logout-btn {
   margin-top: 40px;
   width: 100%;
@@ -348,11 +347,10 @@ nav a:hover {
 }
 
 .logout-btn:hover {
-  background: #e0a825; /* slightly darker on hover */
+  background: #e0a825;
   transform: translateY(-1px);
 }
 
-/* Profile image preview */
 .preview-img {
   width: 100px;
   height: 100px;
@@ -360,10 +358,9 @@ nav a:hover {
   margin: 1px auto 5px auto;
   display: block;
   object-fit: cover;
-  border: 2px solid #F5B942; /* subtle highlight */
+  border: 2px solid #F5B942;
 }
 
-/* Upload label */
 .upload-label {
   display: inline-block;
   margin-top: 2px;
@@ -376,4 +373,23 @@ nav a:hover {
 
 .upload-label:hover {
   color: #e0a825;
+}
+
+/* ✅ NEW FIX FOR PROFILE PICTURE CIRCLE WITH FRAME */
+.profile-pic-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid #F5B942; /* gold frame */
+  overflow: hidden;           /* crop overflow */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-pic-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* crop instead of stretch */
+  object-position: center;
 }
