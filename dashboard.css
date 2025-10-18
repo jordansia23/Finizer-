@@ -28,6 +28,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+    margin-bottom: 100px; 
 }
 
 header {
@@ -60,7 +61,7 @@ nav a:hover {
   transform: translateX(-50%);
   display: flex;
   gap: 30px;
-  padding: 12px 20px;
+  padding: 14px 30px;
   background: rgba(18, 18, 18, 0.021);
   border-radius: 16px;
   backdrop-filter: blur(4px);
@@ -175,8 +176,17 @@ nav a:hover {
 
 .dashboard-cards {
   display: grid;
+<<<<<<< HEAD
   grid-template-columns: 1fr;
   gap: 20px;
+=======
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  align-items: stretch;
+  justify-items: stretch;
+  max-width: 1300px;
+  margin: 0 auto 100px auto;
+>>>>>>> 34d04d5663bb4b6a1aec171b83878a92156dbb39
 }
 
 .card {
@@ -188,6 +198,11 @@ nav a:hover {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   text-align: left;
+    display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
 }
 
 .card:hover {
@@ -221,6 +236,13 @@ nav a:hover {
   padding: 10px;
   border-radius: 12px;
   margin: 10px 0;
+  gap:15px;
+  
+}
+.reminders .reminder p {
+  flex: 1;
+  margin: 0;
+  line-height: 1.5;
 }
 
 .reminders button {
@@ -237,16 +259,46 @@ nav a:hover {
 .reminders button:hover {
   background: #ffcc4d;
 }
+/* Card placement for large screens (desktop) */
+.card:nth-child(1) { grid-column: 1; grid-row: 1; }
+.card:nth-child(2) { grid-column: 2; grid-row: 1; }
+.card:nth-child(3) { grid-column: 3; grid-row: 1; }
+.card:nth-child(4) { grid-column: 4; grid-row: 1; }
+.card:nth-child(5) { grid-column: 1 / span 2; grid-row: 2; }
+.card:nth-child(6) { grid-column: 3 / span 2; grid-row: 2; }
 
-@media (min-width: 768px) {
+/* ✅ Tablet (max 1100px) — 2 columns */
+@media (max-width: 1100px) {
   .dashboard-cards {
     grid-template-columns: repeat(2, 1fr);
+<<<<<<< HEAD
+=======
+    grid-template-rows: auto auto auto;
+  }
+  .card:nth-child(1),
+  .card:nth-child(2),
+  .card:nth-child(3),
+  .card:nth-child(4),
+  .card:nth-child(5),
+  .card:nth-child(6) {
+    grid-column: auto;
+    grid-row: auto;
+>>>>>>> 34d04d5663bb4b6a1aec171b83878a92156dbb39
   }
 }
 
-@media (min-width: 1200px) {
+/* ✅ Mobile (max 700px) — 1 column */
+@media (max-width: 700px) {
   .dashboard-cards {
+<<<<<<< HEAD
     grid-template-columns: repeat(3, 1fr);
+=======
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .card {
+    grid-column: auto;
+>>>>>>> 34d04d5663bb4b6a1aec171b83878a92156dbb39
   }
 }
 
@@ -313,6 +365,10 @@ nav a:hover {
   color: #fff;
 }
 
+<<<<<<< HEAD
+=======
+/* Overlay behind popup */  
+>>>>>>> 34d04d5663bb4b6a1aec171b83878a92156dbb39
 .popup-overlay {
   display: none;
   position: fixed;
@@ -375,6 +431,7 @@ nav a:hover {
   color: #e0a825;
 }
 
+<<<<<<< HEAD
 /* ✅ NEW FIX FOR PROFILE PICTURE CIRCLE WITH FRAME */
 .profile-pic-container {
   width: 120px;
@@ -392,4 +449,53 @@ nav a:hover {
   height: 100%;
   object-fit: cover;          /* crop instead of stretch */
   object-position: center;
+=======
+
+
+/* Spending chart circular style */
+.spending-chart-wrap {
+  width: 230px;
+  height: 230px;
+  margin: 0 auto 15px;
+  position: relative;
+}
+
+.spending-chart-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Custom legend below chart */
+.custom-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  text-align: center;
+}
+
+.legend-item {
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1.5px solid #111;
+}
+
+.mark-paid.paid {
+  background-color: #d3d3d3; /* light gray */
+  color: #555; /* darker text for contrast */
+  cursor: not-allowed;
+  border: 1px solid #aaa;
+  opacity: 0.8;
+>>>>>>> 34d04d5663bb4b6a1aec171b83878a92156dbb39
 }

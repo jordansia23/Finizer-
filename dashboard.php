@@ -53,11 +53,18 @@ $user = $userResult->fetch_assoc();
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<<<<<<< HEAD
   <title>Finizer - Dashboard</title>
   <link rel="icon" type="image/png" href="logo-circle.ico">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="dashboard.css">
 </head>
+=======
+  <title>Dashboard - Finizer</title>
+  <link rel="icon" type="image/png" href="tabicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+>>>>>>> 34d04d5663bb4b6a1aec171b83878a92156dbb39
 <body>
 
   <header>
@@ -87,9 +94,15 @@ $user = $userResult->fetch_assoc();
           <p><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
           <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
 
+<<<<<<< HEAD
           <form action="logout.php" method="POST">
               <button type="submit" class="logout-btn">Logout</button>
           </form>
+=======
+          <button class="logout-btn">
+            <a href="landing.php">Logout</a>
+          </button>
+>>>>>>> 34d04d5663bb4b6a1aec171b83878a92156dbb39
         </div>
       </div>
     </nav>
@@ -128,11 +141,32 @@ $user = $userResult->fetch_assoc();
         <p class="progress">54%</p>
       </div>
 
-      <!-- Spending by Category Card -->
-      <div class="card">
-        <h3>Spending by Category</h3>
-        <canvas id="spendingChart"></canvas>
-      </div>
+<!-- Spending by Category Card -->
+<div class="card">
+  <h3>Spending by Category</h3>
+  
+  <div class="spending-chart-wrap">
+    <canvas id="spendingChart"></canvas>
+  </div>
+
+  <!-- Custom legend below -->
+  <div class="custom-legend">
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #F5B942;"></span> Food
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #d4a015;"></span> Transport
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #a0780c;"></span> School Expenses
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #6b5505;"></span> Others
+    </div>
+  </div>
+</div>
+
+
 
       <!-- Reminders Card -->
       <div class="card reminders">
@@ -209,6 +243,7 @@ $user = $userResult->fetch_assoc();
     </button>
   </div>
 
+<<<<<<< HEAD
   <!-- Assistant Floating Button -->
   <div class="assistant-float" id="assistant">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -218,7 +253,20 @@ $user = $userResult->fetch_assoc();
       <line x1="12" y1="3" x2="12" y2="7"/>
     </svg>
   </div> 
+=======
+  <!-- Assistant Floating Button 
+<div class="assistant-float" id="assistant">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <rect x="3" y="7" width="18" height="12" rx="4"/>
+    <circle cx="8.5" cy="13" r="1.5" fill="#F5B942"/>
+    <circle cx="15.5" cy="13" r="1.5" fill="#F5B942"/>
+    <line x1="12" y1="3" x2="12" y2="7"/>
+  </svg>
+</div> -->
 
+>>>>>>> 34d04d5663bb4b6a1aec171b83878a92156dbb39
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="dashboard.js"></script>
 </body>
 </html>

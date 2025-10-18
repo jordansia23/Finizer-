@@ -47,6 +47,7 @@ function initializeEventListeners() {
     setupPopupCloseHandlers();
 }
 
+<<<<<<< HEAD
 function setupFormHandlers() {
     // Create goal form
     const savingsForm = document.getElementById("savingsForm");
@@ -71,6 +72,41 @@ function setupDelegatedEvents() {
         }
     });
 }
+=======
+// -------------------------
+// Deposit
+// -------------------------
+depositBtn.onclick = (e) => {
+  e.preventDefault();
+  const val = parseFloat(updateAmountInput.value);
+  if (isNaN(val) || val <= 0) {
+    alert("Enter valid amount.");
+    return;
+  }
+  activeSaved += val;
+  addHistory("Added", val);
+  updateUI();
+};
+
+// -------------------------
+// Withdraw
+// -------------------------
+withdrawBtn.onclick = (e) => {
+  e.preventDefault();
+  const val = parseFloat(updateAmountInput.value);
+  if (isNaN(val) || val <= 0) {
+    alert("Enter valid amount.");
+    return;
+  }
+  if (val > activeSaved) {
+    alert("You cannot withdraw beyond your savings.");
+    return;
+  }
+  activeSaved -= val;
+  addHistory("deducted", val);
+  updateUI();
+};
+>>>>>>> 34d04d5663bb4b6a1aec171b83878a92156dbb39
 
 function setupPopupCloseHandlers() {
     window.addEventListener('click', function(e) {
