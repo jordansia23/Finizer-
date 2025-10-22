@@ -1,0 +1,602 @@
+
+:root {
+  --primary: #F5B942;
+  --bg: #000000;
+  --card-bg: rgba(255, 255, 255, 0.07);
+  --text: #ffffff;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  padding: 20px;
+}
+
+/* header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 10%;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.brand img {
+  height: 50px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: 800px;
+  margin-top: 15px;
+  color:#F5B942;
+  text-align: center;
+}
+
+/* header-search bar */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* space between search bar and icons */
+}
+
+.search-bar {
+  width: 220px;
+  padding: 10px 16px;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 14px;
+  box-shadow: 0 0 6px rgba(245, 185, 66, 0.1);
+  transition: 0.3s ease;
+  color: #fff;
+    box-shadow: 0 0 6px rgba(245, 185, 66, 0.1);
+}
+
+.search-bar::placeholder {
+  color: #aaa;
+}
+
+.search-bar:focus {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 10px #F5B942;
+}
+
+.header-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  font-size: 20px;
+  color: #F5B942;
+}
+
+.header-icons i {
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.header-icons i:hover {
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+  .search-bar {
+    max-width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .search-bar {
+    max-width: 180px;
+    margin: 8px auto;
+  }
+
+  .header-icons {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 500px) {
+  .search-bar {
+    max-width: 140px;
+    padding: 6px 10px;
+  }
+
+  .header-icons i {
+    font-size: 16px;
+  }
+
+  .brand img {
+    height: 35px;
+  }
+}
+
+
+/* dock */
+.dock {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+  padding: 12px 20px;
+  background: rgba(18, 18, 18, 0.021);
+  border-radius: 16px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 10px rgb(36, 35, 35);
+  justify-content: center;
+  z-index: 1000;
+}
+.icon {
+ width: 55px;
+  height: 55px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #F5B942;
+  transition: transform 0.1s, color 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+.icon svg {
+  width: 32px;
+  height: 30px;
+  stroke: #F5B942;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.icon:hover {
+  transform: scale(1.4) translateY(-10px);
+  text-shadow: 0 0 10px #F5B942;
+}
+
+/* tooltip */
+.icon::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #F5B942;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.icon:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+/* bills overview */
+.bills-overview {
+  margin: 30px 10%;
+  color: #fff;
+}
+.overview-card {
+  background:  rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 25px 30px;
+  box-shadow: 0 0 10px rgb(36, 35, 35);
+  backdrop-filter: blur(8px);
+  transition: 0.3s ease;
+}
+.overview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.overview-header h2 {
+  color: #F5B942;
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+.add-bill-btn {
+background: #F5B942;
+  color: #000;
+  border: none;
+   padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.add-bill-btn:hover {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 0 8px #F5B942;
+}
+
+.overview-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 120px; /* ← adjust spacing here (try 40–60px) */
+  text-align: center;
+  flex-wrap: wrap;
+}
+.stat h3 {
+  font-size: 2rem;
+  color: #F5B942;
+  margin-bottom: 5px;
+}
+ 
+.amount {
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+
+.stat span {
+  color: #aaa;
+  font-size: 1.2rem;
+}
+
+.next-due {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.next-due span {
+  color: #F5B942;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .overview-card {
+    padding: 20px;
+  }
+
+  .overview-stats {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .add-bill-btn {
+    padding: 6px 14px;
+    font-size: 0.9rem;
+  }
+}
+
+/* bills section */
+.bills-section {
+  width: 80%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+
+.bills-toggle {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  background: #e9e9e9;
+  color: #333;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: 0.3s;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.tab-btn.active {
+  background: #F5B942;
+  color: #fff;
+}
+
+.bills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bill-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 10px 14px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  font-size: 0.9rem;
+}
+
+.bill-card.paid {
+  border-left: 4px solid #27ae60;
+}
+
+.bill-info h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.bill-info p {
+  margin: 3px 0 0;
+  color: #bbb;
+  font-size: 0.8rem;
+}
+
+.bill-amount {
+  font-weight: 700;
+  color: #F5B942;
+  font-size: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ---------- ADD BILL MODAL ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+  z-index: 99;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* --- Modal --- */
+.add-bill-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+   /* subtle translucent background */
+  background: rgba(10, 0, 0, 0.95);
+  border-radius: 20px;
+  width: 320px;
+  padding: 2rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: 0.3s ease;
+  z-index: 100;
+  text-align: center;
+}
+
+.add-bill-modal.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+/* --- Close Button --- */
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+}
+
+/* --- Form Inputs --- */
+#billForm input,
+#billForm select {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* --- Save Button --- */
+.save-btn {
+  background: #F5B942;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.save-btn:hover {
+  background: black;
+  color: #F5B942;
+}
+
+.mark-paid-btn {
+  background: #F5B942;
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.mark-paid-btn:hover {
+  background: #e0a82e;
+}
+
+.bill-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.bill-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mark-paid {
+  background: #F5B942;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.mark-paid:hover {
+  opacity: 0.8;
+}
+
+/* ===============================
+   Notification Dropdown Styling
+================================= */
+.notif-container {
+  position: relative;
+  display: inline-block;
+}
+
+.notif-dropdown {
+  position: absolute;
+  right: 0;
+  top: 35px;
+  background: #1e1e1e;
+  color: white;
+  width: 250px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  padding: 10px;
+  z-index: 100;
+}
+
+.notif-dropdown h4 {
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid #444;
+  font-size: 15px;
+  text-align: center;
+}
+
+.notif-dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notif-dropdown li {
+  padding: 8px 10px;
+  border-bottom: 1px solid #333;
+  font-size: 14px;
+}
+
+.notif-dropdown li:last-child {
+  border-bottom: none;
+}
+
+.hidden {
+  display: none;
+}
+
+
+
+
+.notif-container {
+  position: relative;
+  display: inline-block;
+}
+
+.notif-dropdown {
+  position: absolute;
+  right: 0;
+  top: 35px;
+  background: white;
+  color: black;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  width: 250px;
+  padding: 10px;
+  z-index: 100;
+}
+
+.notif-dropdown.hidden {
+  display: none;
+}
+
+.notif-dropdown h4 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.notif-dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notif-dropdown li {
+  font-size: 14px;
+  margin-bottom: 6px;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.notif-dropdown li.overdue {
+  color: red;
+  font-weight: bold;
+}
+
+.notif-dropdown li.upcoming {
+  color: #f5b942;
+  font-weight: 600;
+}
