@@ -1,7 +1,11 @@
 <?php
+<<<<<<< HEAD
 
 $host = "127.0.0.1:3307";
 $port = 3307; 
+=======
+$host = "localhost";
+>>>>>>> 5867a02b3071bfca54042d3c22370ace515c0512
 $user = "root";
 $pass = "";
 $dbname = "finizer";

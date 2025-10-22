@@ -27,190 +27,128 @@ let activeCard = null;
 // Initialize Event Listeners
 // -------------------------
 document.addEventListener('DOMContentLoaded', function() {
-    initializeEventListeners();
-});
-
-function initializeEventListeners() {
-    // Popup triggers
-    addGoalBtn.addEventListener('click', () => showPopup(popup));
-    closePopup.addEventListener('click', () => hidePopup(popup));
-    closeUpdatePopup.addEventListener('click', () => hidePopup(updatePopup));
-    closeDetailsBtn.addEventListener('click', () => hidePopup(detailsPopup));
+    console.log("Initializing savings page...");
     
-    // Form handlers
-    setupFormHandlers();
+    // Add Goal Button
+    if (addGoalBtn) {
+        addGoalBtn.addEventListener('click', function() {
+            popup.style.display = "flex";
+        });
+    }
     
-    // Delegated events for dynamic content
-    setupDelegatedEvents();
+    // Close Buttons
+    if (closePopup) {
+        closePopup.addEventListener('click', function() {
+            popup.style.display = "none";
+        });
+    }
+    
+    if (closeUpdatePopup) {
+        closeUpdatePopup.addEventListener('click', function() {
+            updatePopup.style.display = "none";
+        });
+    }
+    
+    if (closeDetailsBtn) {
+        closeDetailsBtn.addEventListener('click', function() {
+            detailsPopup.style.display = "none";
+        });
+    }
+    
+    // Update Buttons
+    if (depositBtn) {
+        depositBtn.addEventListener('click', handleDeposit);
+    }
+    
+    if (withdrawBtn) {
+        withdrawBtn.addEventListener('click', handleWithdraw);
+    }
+    
+    // Details Buttons
+    if (saveGoalNameBtn) {
+        saveGoalNameBtn.addEventListener('click', handleSaveGoalName);
+    }
+    
+    if (deleteGoalBtn) {
+        deleteGoalBtn.addEventListener('click', handleDeleteGoal);
+    }
+    
+    // Form submission
+    const savingsForm = document.getElementById("savingsForm");
+    if (savingsForm) {
+        savingsForm.addEventListener('submit', handleCreateGoal);
+    }
+    
+    // ========== ADDED: Setup Update and Details buttons ==========
+    setupGoalCardButtons();
     
     // Close popups when clicking outside
     setupPopupCloseHandlers();
-}
+    
+    console.log("All event listeners initialized");
+});
 
-<<<<<<< HEAD
-function setupFormHandlers() {
-    // Create goal form
-    const savingsForm = document.getElementById("savingsForm");
-    savingsForm.addEventListener('submit', handleCreateGoal);
+// ========== ADDED: Setup buttons for all existing goal cards ==========
+function setupGoalCardButtons() {
+    const updateButtons = document.querySelectorAll('.update-btn');
+    const detailsButtons = document.querySelectorAll('.details-btn');
+    
+    console.log(`Found ${updateButtons.length} update buttons and ${detailsButtons.length} details buttons`);
     
     // Update buttons
-    depositBtn.addEventListener('click', handleDeposit);
-    withdrawBtn.addEventListener('click', handleWithdraw);
+    updateButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            console.log("Update button clicked");
+            activeCard = this.closest('.goal-card');
+            updateAmountInput.value = "";
+            updatePopup.style.display = "flex";
+        });
+    });
     
     // Details buttons
-    saveGoalNameBtn.addEventListener('click', handleSaveGoalName);
-    deleteGoalBtn.addEventListener('click', handleDeleteGoal);
-}
-
-function setupDelegatedEvents() {
-    goalsContainer.addEventListener('click', function(e) {
-        if (e.target.classList.contains("update-btn")) {
-            openUpdatePopup(e.target);
-        }
-        if (e.target.classList.contains("details-btn")) {
-            openDetailsPopup(e.target);
-        }
+    detailsButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            console.log("Details button clicked");
+            activeCard = this.closest('.goal-card');
+            const goalName = activeCard.querySelector('h2').textContent;
+            const history = JSON.parse(activeCard.dataset.history || "[]");
+            
+            goalNameDisplay.textContent = goalName;
+            goalNameEdit.value = goalName;
+            displayHistory(history);
+            detailsPopup.style.display = "flex";
+        });
     });
 }
-=======
-// -------------------------
-// Deposit
-// -------------------------
-depositBtn.onclick = (e) => {
-  e.preventDefault();
-  const val = parseFloat(updateAmountInput.value);
-  if (isNaN(val) || val <= 0) {
-    alert("Enter valid amount.");
-    return;
-  }
-  activeSaved += val;
-  addHistory("Added", val);
-  updateUI();
-};
-
-// -------------------------
-// Withdraw
-// -------------------------
-withdrawBtn.onclick = (e) => {
-  e.preventDefault();
-  const val = parseFloat(updateAmountInput.value);
-  if (isNaN(val) || val <= 0) {
-    alert("Enter valid amount.");
-    return;
-  }
-  if (val > activeSaved) {
-    alert("You cannot withdraw beyond your savings.");
-    return;
-  }
-  activeSaved -= val;
-  addHistory("deducted", val);
-  updateUI();
-};
->>>>>>> 34d04d5663bb4b6a1aec171b83878a92156dbb39
 
 function setupPopupCloseHandlers() {
-    window.addEventListener('click', function(e) {
-        if (e.target === popup) hidePopup(popup);
-        if (e.target === updatePopup) hidePopup(updatePopup);
-        if (e.target === detailsPopup) hidePopup(detailsPopup);
-    });
-}
-
-// -------------------------
-// Popup Utilities
-// -------------------------
-function showPopup(popupElement) {
-    popupElement.style.display = "flex";
-}
-
-function hidePopup(popupElement) {
-    popupElement.style.display = "none";
-}
-
-// -------------------------
-// Create Goal Handler
-// -------------------------
-function handleCreateGoal(e) {
-    e.preventDefault();
-
-    const goalName = document.getElementById("goalName").value.trim();
-    const targetAmt = parseFloat(document.getElementById("goalTarget").value);
-    const amtSvd = parseFloat(document.getElementById("goalSaved").value) || 0;
-
-    if (!goalName || isNaN(targetAmt) || targetAmt <= 0 || amtSvd < 0) {
-        alert("Please enter valid goal name and amounts.");
-        return;
+    // Close when clicking outside popup
+    if (popup) {
+        popup.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = "none";
+            }
+        });
     }
-
-    const formData = new FormData();
-    formData.append("create_goal", "1");
-    formData.append("goal_name", goalName);
-    formData.append("target_amt", targetAmt);
-    formData.append("amt_svd", amtSvd);
-
-    fetch("savings.php", {
-        method: "POST",
-        body: formData,
-        headers: { "X-Requested-With": "XMLHttpRequest" }
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            addNewGoalCard(data);
-            hidePopup(popup);
-            document.getElementById("savingsForm").reset();
-        } else {
-            alert(data.error || "Error creating goal.");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error connecting to server.");
-    });
+    
+    if (updatePopup) {
+        updatePopup.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = "none";
+            }
+        });
+    }
+    
+    if (detailsPopup) {
+        detailsPopup.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = "none";
+            }
+        });
+    }
 }
 
-function addNewGoalCard(data) {
-    // Remove no-goals message if it exists
-    const noGoals = document.querySelector('.no-goals');
-    if (noGoals) noGoals.remove();
-
-    const newCard = document.createElement("div");
-    newCard.className = "card goal-card";
-    newCard.dataset.id = data.savings_id;
-    newCard.dataset.saved = data.amt_svd;
-    newCard.dataset.target = data.target_amt;
-    newCard.dataset.history = "[]";
-
-    const percent = Math.min((data.amt_svd / data.target_amt) * 100, 100);
-
-    newCard.innerHTML = `
-        <h2>${data.goal_name}</h2>
-        <p class="amount">Target: ₱${data.target_amt.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</p>
-        <p class="amount">Saved: <span class="saved">₱${data.amt_svd.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</span></p>
-        <div class="progress">
-            <div class="progress-fill" style="width:${percent}%"></div>
-        </div>
-        <p class="percentage">${percent.toFixed(1)}%</p>
-        <p class="amount">Created: ${new Date().toLocaleDateString()}</p>
-        <p class="amount">Updated: ${new Date().toLocaleDateString()}</p>
-        <div class="btn-group">
-            <button class="btn btn-add update-btn">Update</button>
-            <button class="btn btn-details details-btn">Details</button>
-        </div>
-    `;
-
-    goalsContainer.prepend(newCard);
-}
-
-// -------------------------
-// Update Popup Handlers
-// -------------------------
-function openUpdatePopup(button) {
-    activeCard = button.closest(".goal-card");
-    updateAmountInput.value = "";
-    showPopup(updatePopup);
-}
-
+// ========== ADDED: Update Popup Functions ==========
 function handleDeposit(e) {
     e.preventDefault();
     processTransaction("deposit");
@@ -222,6 +160,11 @@ function handleWithdraw(e) {
 }
 
 function processTransaction(action) {
+    if (!activeCard) {
+        alert("No active goal selected.");
+        return;
+    }
+
     const amount = parseFloat(updateAmountInput.value);
     if (isNaN(amount) || amount <= 0) {
         alert("Please enter a valid amount.");
@@ -278,47 +221,30 @@ function updateCardAfterTransaction(newAmount, action, amount) {
     // Add to history
     addHistory(action, amount);
     
-    hidePopup(updatePopup);
+    updatePopup.style.display = "none";
     updateAmountInput.value = "";
 }
 
-// -------------------------
-// Details Popup Handlers
-// -------------------------
-function openDetailsPopup(button) {
-    activeCard = button.closest(".goal-card");
-    const goalName = activeCard.querySelector("h2").textContent;
-    const history = JSON.parse(activeCard.dataset.history || "[]");
-
-    goalNameDisplay.textContent = goalName;
-    goalNameEdit.value = goalName;
-    displayHistory(history);
-    showPopup(detailsPopup);
-}
-
+// ========== ADDED: Details Popup Functions ==========
 function displayHistory(history) {
+    if (!historyList) return;
+    
     historyList.innerHTML = "";
     if (history.length === 0) {
-        const li = document.createElement("li");
-        li.textContent = "No transaction history yet.";
-        li.style.padding = "20px";
-        li.style.textAlign = "center";
-        li.style.color = "#666";
-        historyList.appendChild(li);
+        historyList.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">No transaction history yet.</div>';
     } else {
         history.forEach(item => {
-            const li = document.createElement("li");
-            const parts = item.split(" on ");
-            li.innerHTML = `<div style="margin: 5px 0;">
-                <strong>${parts[0]}</strong><br>
-                <span style="font-size:0.85rem; color:#555;">${parts[1]}</span>
-            </div>`;
-            historyList.appendChild(li);
+            const div = document.createElement("div");
+            div.style.cssText = "margin: 8px 0; padding: 10px; background: #3d3d3d; border-radius: 8px; border-left: 3px solid #F5B942;";
+            div.innerHTML = `<strong>${item.split(" on ")[0]}</strong><br><small style="color:#888;">${item.split(" on ")[1]}</small>`;
+            historyList.appendChild(div);
         });
     }
 }
 
 function handleSaveGoalName() {
+    if (!activeCard) return;
+    
     const newName = goalNameEdit.value.trim();
     if (!newName) {
         alert("Goal name cannot be empty.");
@@ -369,7 +295,7 @@ function handleDeleteGoal() {
     .then(data => {
         if (data.success) {
             activeCard.remove();
-            hidePopup(detailsPopup);
+            detailsPopup.style.display = "none";
             
             // Show no goals message if no cards left
             if (document.querySelectorAll('.goal-card').length === 0) {
@@ -387,10 +313,10 @@ function handleDeleteGoal() {
     });
 }
 
-// -------------------------
-// History Management
-// -------------------------
+// ========== ADDED: History Management ==========
 function addHistory(action, amount) {
+    if (!activeCard) return;
+    
     const now = new Date();
     const formattedAmount = amount.toLocaleString('en-PH', { 
         minimumFractionDigits: 2, 
@@ -402,6 +328,85 @@ function addHistory(action, amount) {
     const log = `${actionText} ₱${formattedAmount} on ${formattedDate}`;
     
     let history = JSON.parse(activeCard.dataset.history || "[]");
-    history.unshift(log); // Add to beginning
+    history.unshift(log);
     activeCard.dataset.history = JSON.stringify(history);
+}
+
+// -------------------------
+// Create Goal Handler (your existing code)
+// -------------------------
+function handleCreateGoal(e) {
+    e.preventDefault();
+
+    const goalName = document.getElementById("goalName").value.trim();
+    const targetAmt = parseFloat(document.getElementById("goalTarget").value);
+    const amtSvd = parseFloat(document.getElementById("goalSaved").value) || 0;
+
+    if (!goalName || isNaN(targetAmt) || targetAmt <= 0 || amtSvd < 0) {
+        alert("Please enter valid goal name and amounts.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("create_goal", "1");
+    formData.append("goal_name", goalName);
+    formData.append("target_amt", targetAmt);
+    formData.append("amt_svd", amtSvd);
+
+    fetch("savings.php", {
+        method: "POST",
+        body: formData,
+        headers: { "X-Requested-With": "XMLHttpRequest" }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            addNewGoalCard(data);
+            popup.style.display = "none";
+            document.getElementById("savingsForm").reset();
+            
+            // Re-setup buttons for the new card
+            setTimeout(() => {
+                setupGoalCardButtons();
+            }, 100);
+        } else {
+            alert(data.error || "Error creating goal.");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error connecting to server.");
+    });
+}
+
+function addNewGoalCard(data) {
+    const noGoals = document.querySelector('.no-goals');
+    if (noGoals) noGoals.remove();
+
+    const newCard = document.createElement("div");
+    newCard.className = "card goal-card";
+    newCard.dataset.id = data.savings_id;
+    newCard.dataset.saved = data.amt_svd;
+    newCard.dataset.target = data.target_amt;
+    newCard.dataset.history = "[]";
+
+    const percent = Math.min((data.amt_svd / data.target_amt) * 100, 100);
+
+    newCard.innerHTML = `
+        <h2>${data.goal_name}</h2>
+        <p class="amount">Target: ₱${data.target_amt.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</p>
+        <p class="amount">Saved: <span class="saved">₱${data.amt_svd.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</span></p>
+        <div class="progress">
+            <div class="progress-fill" style="width:${percent}%"></div>
+        </div>
+        <p class="percentage">${percent.toFixed(1)}%</p>
+        <p class="amount">Created: ${new Date().toLocaleDateString()}</p>
+        <p class="amount">Updated: ${new Date().toLocaleDateString()}</p>
+        <div class="btn-group">
+            <button class="btn btn-add update-btn">Update</button>
+            <button class="btn btn-details details-btn">Details</button>
+        </div>
+    `;
+
+    goalsContainer.prepend(newCard);
 }

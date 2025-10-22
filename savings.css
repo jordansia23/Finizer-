@@ -128,7 +128,10 @@ h1 {
 }
 .card:hover { transform: translateY(-5px); }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5867a02b3071bfca54042d3c22370ace515c0512
 .card h2 { 
   font-size: 1.3rem; 
   margin-bottom: 10px; 
@@ -138,9 +141,12 @@ h1 {
   text-overflow: ellipsis;
   flex-shrink: 0; /* Prevent title from shrinking */
 }
+<<<<<<< HEAD
 
 .card h2 { font-size: 1.2rem; margin-bottom: 15px; }
 
+=======
+>>>>>>> 5867a02b3071bfca54042d3c22370ace515c0512
 
 .progress {
   width: 100%;
