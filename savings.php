@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "db_connect.php";
+ob_start();
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -14,6 +14,7 @@ $user_id = $_SESSION['uid'];
 
 // Handle adding a new goal
 if (isset($_POST['create_goal'])) {
+    include "db_connect.php";
     $goal_name = $_POST['goal_name'];
     $target_amt = $_POST['target_amt'];
     $amt_svd = $_POST['amt_svd'] ?? 0;
@@ -24,6 +25,14 @@ if (isset($_POST['create_goal'])) {
 
     $new_id = $stmt->insert_id;
     $stmt->close();
+
+    // Add initial transaction to history if amount saved > 0
+    if ($amt_svd > 0) {
+        $history_stmt = $conn->prepare("INSERT INTO savings_history (savings_id, amount, action) VALUES (?, ?, 'deposit')");
+        $history_stmt->bind_param("id", $new_id, $amt_svd);
+        $history_stmt->execute();
+        $history_stmt->close();
+    }
 
     // Check if it's an AJAX request
     if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -63,6 +72,26 @@ if (isset($_POST['create_goal'])) {
 
    <h1>Savings Goals</h1>
 
+   <!-- Summary Section -->
+   <div class="savings-summary">
+        <div class="summary-card">
+            <h3>Active Goals</h3>
+            <p class="summary-amount" id="activeGoalsCount">0</p>
+        </div>
+        <div class="summary-card">
+            <h3>Total Saved</h3>
+            <p class="summary-amount" id="totalSaved">₱0.00</p>
+        </div>
+        <div class="summary-card">
+            <h3>Total Target</h3>
+            <p class="summary-amount" id="totalTarget">₱0.00</p>
+        </div>
+        <div class="summary-card">
+            <h3>Overall Progress</h3>
+            <p class="summary-amount" id="overallProgress">0%</p>
+        </div>
+   </div>
+
    <!-- Add Goal Popup -->
 <div class="popup-overlay" id="popup">
   <div class="popup-content">
@@ -94,56 +123,61 @@ if (isset($_POST['create_goal'])) {
   </div>
 </div>
 
-<div class="savings-container" id="goalsContainer">
-    <?php
-    $query = $conn->prepare("SELECT savings_id, goal_name, target_amt, amt_svd, created_at, uploaded_at FROM savings_table WHERE user_id = ?");
-    $query->bind_param("i", $user_id);
-    $query->execute();
-    $result = $query->get_result();
+<!-- Savings Table -->
+<div class="savings-table-container">
+    <table class="savings-table">
+        <thead>
+            <tr>
+                <th>Goal Name</th>
+                <th>Target Amount</th>
+                <th>Amount Saved</th>
+                <th>Progress</th>
+                <th>Status</th>
+                <th>Created Date</th>
+                <th>Last Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="goalsTableBody">
+            <?php
+            include("db_connect.php");
+            $query = $conn->prepare("SELECT savings_id, goal_name, target_amt, amt_svd, status, created_at, uploaded_at FROM savings_table WHERE user_id = ? ORDER BY created_at DESC");
+            $query->bind_param("i", $user_id);
+            $query->execute();
+            $result = $query->get_result();
 
-    if ($result->num_rows === 0) {
-        echo '<div class="no-goals" id="noGoalsMessage">No savings goals yet. Click the + button to create one!</div>';
-    }
+            if ($result->num_rows === 0) {
+                echo '<tr><td colspan="8" class="no-goals">No savings goals yet. Click the + button to create one!</td></tr>';
+            }
 
-    while ($row = $result->fetch_assoc()) {
-        // Fetch history for this goal
-        $history_stmt = $conn->prepare("SELECT amount, action, created_at FROM savings_history WHERE savings_id = ? ORDER BY created_at DESC");
-        $history_stmt->bind_param("i", $row['savings_id']);
-        $history_stmt->execute();
-        $history_result = $history_stmt->get_result();
-
-        $history_array = [];
-        while ($hist = $history_result->fetch_assoc()) {
-            $action_text = $hist['action'] == 'deposit' ? 'Deposited' : 'Withdrew';
-            $history_array[] = $action_text . " ₱" . number_format($hist['amount'],2) . " on " . $hist['created_at'];
-        }
-        $history_json = htmlspecialchars(json_encode($history_array));
-
-        $percent = ($row['target_amt'] > 0) ? min(($row['amt_svd'] / $row['target_amt']) * 100, 100) : 0;
-
-        echo '<div class="card goal-card" 
-                   data-id="'.$row['savings_id'].'" 
-                   data-saved="'.$row['amt_svd'].'" 
-                   data-target="'.$row['target_amt'].'"
-                   data-history="'.$history_json.'">
-                <h2>'.htmlspecialchars($row['goal_name']).'</h2>
-                <p class="amount">Target: ₱'.number_format($row['target_amt'], 2).'</p>
-                <p class="amount">Saved: <span class="saved">₱'.number_format($row['amt_svd'], 2).'</span></p>
-                <div class="progress">
-                  <div class="progress-fill" style="width: '.$percent.'%"></div>
-                </div>
-                <p class="percentage">'.number_format($percent, 1).'%</p>
-                <p class="amount">Created: '.date('M j, Y', strtotime($row['created_at'])).'</p>
-                <p class="amount">Updated: '.date('M j, Y', strtotime($row['uploaded_at'])).'</p>
-                <div class="btn-group">
-                    <button class="btn btn-add update-btn" type="button">Update</button>
-                    <button class="btn btn-details details-btn" type="button">Details</button>
-                </div>
-            </div>';
-        $history_stmt->close();
-    }
-    $query->close();
-    ?>
+            while ($row = $result->fetch_assoc()) {
+                $percent = ($row['target_amt'] > 0) ? min(($row['amt_svd'] / $row['target_amt']) * 100, 100) : 0;
+                $status_class = $row['status'] == 'active' ? 'status-active' : 'status-inactive';
+                
+                echo '<tr class="goal-row" data-id="'.$row['savings_id'].'" data-saved="'.$row['amt_svd'].'" data-target="'.$row['target_amt'].'" data-name="'.htmlspecialchars($row['goal_name'], ENT_QUOTES).'" data-status="'.$row['status'].'">
+                        <td>'.htmlspecialchars($row['goal_name'],ENT_QUOTES).'</td>
+                        <td>₱'.number_format($row['target_amt'], 2).'</td>
+                        <td>₱'.number_format($row['amt_svd'], 2).'</td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: '.$percent.'%"></div>
+                                <span class="progress-text">'.number_format($percent, 1).'%</span>
+                            </div>
+                        </td>
+                        <td><span class="status-badge '.$status_class.'">'.ucfirst($row['status']).'</span></td>
+                        <td>'.date('M j, Y', strtotime($row['created_at'])).'</td>
+                        <td>'.date('M j, Y', strtotime($row['uploaded_at'])).'</td>
+                        <td>
+                            <button class="btn btn-sm btn-add update-btn">Update</button>
+                            <button class="btn btn-sm btn-details details-btn">Details</button>
+                            <button class="btn btn-sm status-toggle-btn" data-status="'.$row['status'].'">'.($row['status'] == 'active' ? 'Archive' : 'Activate').'</button>
+                        </td>
+                    </tr>';
+            }
+            $query->close();
+            ?>
+        </tbody>
+    </table>
 </div>
 
 <!-- Floating Add Button -->
@@ -196,18 +230,17 @@ if (isset($_POST['create_goal'])) {
     </button>
 </div>
 
-<!-- Detail Popup - UPDATED WITH INPUT ABOVE, BUTTONS BELOW -->
+<!-- Detail Popup -->
 <div class="popup-overlay" id="detailsPopup">
   <div class="popup-content">
     <button class="close-btn" id="closeDetailsBtn" type="button">×</button>
     <h2 id="goalNameDisplay">Goal Details</h2>
 
-    <!-- Change Goal Name and Delete Goal - INPUT ABOVE, BUTTONS BELOW -->
     <div class="edit-delete-section">
       <input type="text" id="goalNameEdit" placeholder="Enter new goal name">
       <div class="button-row">
         <button type="button" id="saveGoalNameBtn">Save Name</button>
-        <button type="button" id="deleteGoalBtn" class="delete-btn">Delete Goal</button>
+        <button type="button" id="toggleStatusBtn" class="status-btn">Archive Goal</button>
       </div>
     </div>
 
@@ -219,347 +252,6 @@ if (isset($_POST['create_goal'])) {
   </div>
 </div>
 
-<!-- COMPLETE JAVASCRIPT EMBEDDED -->
-<script>
-// All JavaScript embedded directly in the file
-let activeCard = null;
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("Savings page fully loaded");
-    
-    // Add Goal Button
-    document.getElementById("addGoalBtn").addEventListener('click', function() {
-        document.getElementById("popup").style.display = "flex";
-    });
-    
-    // Close Buttons
-    document.getElementById("closePopup").addEventListener('click', function() {
-        document.getElementById("popup").style.display = "none";
-    });
-    
-    document.getElementById("closeUpdatePopup").addEventListener('click', function() {
-        document.getElementById("updatePopup").style.display = "none";
-    });
-    
-    document.getElementById("closeDetailsBtn").addEventListener('click', function() {
-        document.getElementById("detailsPopup").style.display = "none";
-    });
-    
-    // UPDATE BUTTONS - This will make them work
-    const updateButtons = document.querySelectorAll('.update-btn');
-    console.log("Found update buttons:", updateButtons.length);
-    
-    updateButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            console.log("UPDATE button clicked!");
-            activeCard = this.closest('.goal-card');
-            document.getElementById("updateAmount").value = "";
-            document.getElementById("updatePopup").style.display = "flex";
-        });
-    });
-    
-    // DETAILS BUTTONS - This will make them work
-    const detailsButtons = document.querySelectorAll('.details-btn');
-    console.log("Found details buttons:", detailsButtons.length);
-    
-    detailsButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            console.log("DETAILS button clicked!");
-            activeCard = this.closest('.goal-card');
-            const goalName = activeCard.querySelector('h2').textContent;
-            const history = JSON.parse(activeCard.dataset.history || "[]");
-            
-            document.getElementById("goalNameDisplay").textContent = goalName;
-            document.getElementById("goalNameEdit").value = goalName;
-            displayHistory(history);
-            document.getElementById("detailsPopup").style.display = "flex";
-        });
-    });
-    
-    // Deposit/Withdraw buttons
-    document.getElementById("depositBtn").addEventListener('click', handleDeposit);
-    document.getElementById("withdrawBtn").addEventListener('click', handleWithdraw);
-    
-    // Details action buttons
-    document.getElementById("saveGoalNameBtn").addEventListener('click', handleSaveGoalName);
-    document.getElementById("deleteGoalBtn").addEventListener('click', handleDeleteGoal);
-    
-    // Form submission
-    document.getElementById("savingsForm").addEventListener('submit', handleCreateGoal);
-    
-    // Close popups when clicking outside
-    setupPopupCloseHandlers();
-});
-
-function setupPopupCloseHandlers() {
-    document.getElementById("popup").addEventListener('click', function(e) {
-        if (e.target === this) this.style.display = "none";
-    });
-    
-    document.getElementById("updatePopup").addEventListener('click', function(e) {
-        if (e.target === this) this.style.display = "none";
-    });
-    
-    document.getElementById("detailsPopup").addEventListener('click', function(e) {
-        if (e.target === this) this.style.display = "none";
-    });
-}
-
-// Update Functions
-function handleDeposit(e) {
-    e.preventDefault();
-    processTransaction("deposit");
-}
-
-function handleWithdraw(e) {
-    e.preventDefault();
-    processTransaction("withdraw");
-}
-
-function processTransaction(action) {
-    if (!activeCard) {
-        alert("No active goal selected.");
-        return;
-    }
-
-    const amount = parseFloat(document.getElementById("updateAmount").value);
-    if (isNaN(amount) || amount <= 0) {
-        alert("Please enter a valid amount.");
-        return;
-    }
-
-    const currentSaved = parseFloat(activeCard.dataset.saved);
-    
-    if (action === "withdraw" && amount > currentSaved) {
-        alert("Cannot withdraw more than current savings.");
-        return;
-    }
-
-    fetch("savings_update.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-            savings_id: activeCard.dataset.id, 
-            action: action, 
-            amount: amount 
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            updateCardAfterTransaction(data.amt_svd, action, amount);
-        } else {
-            alert(data.error || "Transaction failed.");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error processing transaction.");
-    });
-}
-
-function updateCardAfterTransaction(newAmount, action, amount) {
-    const targetAmount = parseFloat(activeCard.dataset.target);
-    
-    // Update card data
-    activeCard.dataset.saved = newAmount;
-    
-    // Update displayed values
-    const percent = Math.min((newAmount / targetAmount) * 100, 100);
-    activeCard.querySelector(".saved").textContent = 
-        `₱${newAmount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    activeCard.querySelector(".progress-fill").style.width = percent + "%";
-    activeCard.querySelector(".percentage").textContent = percent.toFixed(1) + "%";
-    
-    // Update the "Updated" date
-    const amountElements = activeCard.querySelectorAll('.amount');
-    amountElements[amountElements.length - 1].textContent = "Updated: " + new Date().toLocaleDateString();
-    
-    // Add to history
-    addHistory(action, amount);
-    
-    document.getElementById("updatePopup").style.display = "none";
-    document.getElementById("updateAmount").value = "";
-}
-
-// Details Functions
-function displayHistory(history) {
-    const historyList = document.getElementById("historyList");
-    historyList.innerHTML = "";
-    
-    if (history.length === 0) {
-        historyList.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">No transaction history yet.</div>';
-    } else {
-        history.forEach(item => {
-            const div = document.createElement("div");
-            div.style.cssText = "margin: 8px 0; padding: 10px; background: #3d3d3d; border-radius: 8px; border-left: 3px solid #F5B942;";
-            div.innerHTML = `<strong>${item.split(" on ")[0]}</strong><br><small style="color:#888;">${item.split(" on ")[1]}</small>`;
-            historyList.appendChild(div);
-        });
-    }
-}
-
-function handleSaveGoalName() {
-    if (!activeCard) return;
-    
-    const newName = document.getElementById("goalNameEdit").value.trim();
-    if (!newName) {
-        alert("Goal name cannot be empty.");
-        return;
-    }
-
-    fetch("savings_update.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-            savings_id: activeCard.dataset.id, 
-            action: "update_name", 
-            new_name: newName 
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            activeCard.querySelector("h2").textContent = newName;
-            document.getElementById("goalNameDisplay").textContent = newName;
-            alert("Goal name updated successfully!");
-        } else {
-            alert(data.error || "Failed to update goal name.");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error updating goal name.");
-    });
-}
-
-function handleDeleteGoal() {
-    if (!activeCard) return;
-    
-    if (!confirm("Are you sure you want to delete this goal? This action cannot be undone.")) {
-        return;
-    }
-
-    fetch("savings_update.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-            savings_id: activeCard.dataset.id, 
-            action: "delete" 
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            activeCard.remove();
-            document.getElementById("detailsPopup").style.display = "none";
-            
-            // Show no goals message if no cards left
-            if (document.querySelectorAll('.goal-card').length === 0) {
-                document.getElementById("goalsContainer").innerHTML = '<div class="no-goals">No savings goals yet. Click the + button to create one!</div>';
-            }
-            
-            alert("Goal deleted successfully!");
-        } else {
-            alert(data.error || "Failed to delete goal.");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error deleting goal.");
-    });
-}
-
-// History Management
-function addHistory(action, amount) {
-    if (!activeCard) return;
-    
-    const now = new Date();
-    const formattedAmount = amount.toLocaleString('en-PH', { 
-        minimumFractionDigits: 2, 
-        maximumFractionDigits: 2 
-    });
-    const formattedDate = now.toLocaleString();
-
-    const actionText = action === 'deposit' ? 'Deposited' : 'Withdrew';
-    const log = `${actionText} ₱${formattedAmount} on ${formattedDate}`;
-    
-    let history = JSON.parse(activeCard.dataset.history || "[]");
-    history.unshift(log);
-    activeCard.dataset.history = JSON.stringify(history);
-}
-
-// Create Goal Handler
-function handleCreateGoal(e) {
-    e.preventDefault();
-
-    const goalName = document.getElementById("goalName").value.trim();
-    const targetAmt = parseFloat(document.getElementById("goalTarget").value);
-    const amtSvd = parseFloat(document.getElementById("goalSaved").value) || 0;
-
-    if (!goalName || isNaN(targetAmt) || targetAmt <= 0 || amtSvd < 0) {
-        alert("Please enter valid goal name and amounts.");
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append("create_goal", "1");
-    formData.append("goal_name", goalName);
-    formData.append("target_amt", targetAmt);
-    formData.append("amt_svd", amtSvd);
-
-    fetch("savings.php", {
-        method: "POST",
-        body: formData,
-        headers: { "X-Requested-With": "XMLHttpRequest" }
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            addNewGoalCard(data);
-            document.getElementById("popup").style.display = "none";
-            document.getElementById("savingsForm").reset();
-        } else {
-            alert(data.error || "Error creating goal.");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error connecting to server.");
-    });
-}
-
-function addNewGoalCard(data) {
-    const noGoals = document.querySelector('.no-goals');
-    if (noGoals) noGoals.remove();
-
-    const newCard = document.createElement("div");
-    newCard.className = "card goal-card";
-    newCard.dataset.id = data.savings_id;
-    newCard.dataset.saved = data.amt_svd;
-    newCard.dataset.target = data.target_amt;
-    newCard.dataset.history = "[]";
-
-    const percent = Math.min((data.amt_svd / data.target_amt) * 100, 100);
-
-    newCard.innerHTML = `
-        <h2>${data.goal_name}</h2>
-        <p class="amount">Target: ₱${data.target_amt.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</p>
-        <p class="amount">Saved: <span class="saved">₱${data.amt_svd.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</span></p>
-        <div class="progress">
-            <div class="progress-fill" style="width:${percent}%"></div>
-        </div>
-        <p class="percentage">${percent.toFixed(1)}%</p>
-        <p class="amount">Created: ${new Date().toLocaleDateString()}</p>
-        <p class="amount">Updated: ${new Date().toLocaleDateString()}</p>
-        <div class="btn-group">
-            <button class="btn btn-add update-btn">Update</button>
-            <button class="btn btn-details details-btn">Details</button>
-        </div>
-    `;
-
-    document.getElementById("goalsContainer").prepend(newCard);
-}
-</script>
+<script src="savings.js"></script>
 </body>
 </html>

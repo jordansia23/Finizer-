@@ -33,10 +33,148 @@ header {
 h1 {
   font-size: 2rem;
   margin-bottom: 20px;
-  font-weight: 800px;
+  font-weight: 800;
   margin-top: 15px;
   color:#F5B942;
   text-align: center;
+}
+
+/* Summary Section Styles */
+.savings-summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 30px 0;
+    padding: 0 20px;
+}
+
+.summary-card {
+    flex: 1;
+    background: linear-gradient(135deg, var(--card-bg), rgba(255,255,255,0.1));
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+}
+
+.summary-card h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.summary-amount {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #F5B942;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Table Styles */
+.savings-table-container {
+    background: var(--card-bg);
+    backdrop-filter: blur(15px);
+    border-radius: 16px;
+    padding: 25px;
+    margin: 20px 0;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    overflow-x: auto;
+}
+
+.savings-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text);
+}
+
+.savings-table th {
+    background: rgba(245, 185, 66, 0.1);
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid rgba(245, 185, 66, 0.3);
+    color: #F5B942;
+}
+
+.savings-table td {
+    padding: 15px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.9rem;
+}
+
+.savings-table tr:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* Progress Bar in Table */
+.progress-bar {
+    position: relative;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    height: 24px;
+    overflow: hidden;
+    min-width: 120px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #F5B942, #ffde6b);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #000;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-active {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-inactive {
+    background: rgba(244, 67, 54, 0.2);
+    color: #F44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
 }
 
 /* dock */
@@ -104,92 +242,51 @@ h1 {
   transform: translateX(-50%) translateY(-5px);
 }
 
-/* savings container - RECTANGULAR FIXED SIZE */
-.savings-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 320px));
-  gap: 20px;
-  margin-top: 60px;
-  justify-content: center;
+/* Button Styles */
+.btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.card {
-  background: var(--card-bg);
-  backdrop-filter: blur(15px);
-  border-radius: 20px;
-  padding: 20px; /* Reduced padding */
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-  transition: transform 0.2s ease;
-  width: 320px;
-  height: 220px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* Prevent content overflow */
-}
-.card:hover { transform: translateY(-5px); }
-
-.card h2 { 
-  font-size: 1.3rem; 
-  margin-bottom: 10px; 
-  font-weight: 600; 
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-shrink: 0; /* Prevent title from shrinking */
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  border-radius: 8px;
+  margin: 2px;
 }
 
-.progress {
-  width: 100%;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 8px;
-  flex-shrink: 0; /* Prevent progress bar from shrinking */
-}
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #F5B942, #ffde6b);
-  width: 0%;
-  border-radius: 10px;
-  transition: width 0.5s ease;
+.btn-add {
+  background: var(--primary);
+  color: #000;
+  font-weight: 600;
 }
 
-.percentage { 
-  font-weight: 500; 
-  font-size: 1rem; 
-  margin-bottom: 6px; 
-  color: #F5B942;
-  flex-shrink: 0;
-}
-.amount { 
-  font-size: 0.85rem; 
-  opacity: 0.8;
-  margin-bottom: 4px;
-  flex-shrink: 0;
+.btn-add:hover {
+  background: #ffde6b;
 }
 
-/* Info section that can grow/shrink */
-.card-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 0; /* Allow shrinking */
+.btn-details {
+  background: #333;
+  color: #fff;
 }
 
-.btn-group { 
-  display: flex; 
-  gap: 10px; 
-  margin-top: auto;
-  padding-top: 10px;
-  flex-shrink: 0; /* Keep buttons at bottom */
+.btn-details:hover {
+  background: #555;
 }
-.btn { padding: 6px 14px; border: none; border-radius: 12px; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
-.btn-add { background: var(--primary); color: #000; font-weight: 600; }
-.btn-add:hover { background: #ffde6b; }
-.btn-details { background: #333; color: #fff; }
-.btn-details:hover { background: #555; }
+
+.status-toggle-btn {
+  background: rgba(255,255,255,0.1);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.status-toggle-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
 
 /* floating add button */
 .floating-btn {
@@ -209,16 +306,22 @@ h1 {
   transition: 0.3s;
    z-index: 1000;
 }
-.floating-btn:hover { background: #ffde6b; transform: scale(1.05); }
+.floating-btn:hover {
+  background: #ffde6b;
+  transform: scale(1.05);
+}
 
 /* popup */
 .popup-overlay {
  display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0,0,0,0.6);
-  justify-content: center; align-items: center;
+  justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 .popup-content {
@@ -235,10 +338,15 @@ h1 {
   text-align: left;
   display: flex;
   flex-direction: column;
-  position: relative; /* Added for close button positioning */
+  position: relative;
 }
 
-.popup-content h2 { margin-bottom: 15px; color: #F5B942; text-align: center; }
+.popup-content h2 {
+  margin-bottom: 15px;
+  color: #F5B942;
+  text-align: center;
+}
+
 .popup-content input {
   width: 100%;
   margin: 8px 0;
@@ -249,19 +357,21 @@ h1 {
   background: #2d2d2d;
   color: var(--text);
 }
+
 .popup-content input::placeholder {
   color: #888;
 }
+
 .popup-content input:focus {
   border-color: #F5B942;
   box-shadow: 0 0 0 2px rgba(245, 185, 66, 0.2);
 }
 
 /* Fixed popup buttons - closer together */
-.popup-buttons { 
-  display: flex; 
+.popup-buttons {
+  display: flex;
   gap: 10px;
-  margin-top: 15px; 
+  margin-top: 15px;
 }
 
 .popup-buttons .btn {
@@ -290,6 +400,7 @@ h1 {
   transition: 0.2s;
   z-index: 1001;
 }
+
 .close-btn:hover {
   background: #dca532;
   transform: scale(1.1);
@@ -349,13 +460,33 @@ h1 {
   transform: translateY(-2px);
 }
 
-.delete-btn {
-  background: #e74c3c;
-  color: #fff;
+/* Status buttons in popup */
+.status-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.delete-btn:hover {
-  background: #c0392b;
+.status-btn.archive {
+  background: #F5B942;
+  color: #000;
+}
+
+.status-btn.archive:hover {
+  background: #ffde6b;
+  transform: translateY(-2px);
+}
+
+.status-btn.activate {
+  background: #4CAF50;
+  color: white;
+}
+
+.status-btn.activate:hover {
+  background: #66BB6A;
   transform: translateY(-2px);
 }
 
@@ -438,6 +569,7 @@ h1 {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
 @keyframes slideUp {
   from { transform: translateY(30px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
@@ -445,24 +577,10 @@ h1 {
 
 /* No goals message */
 .no-goals {
-    grid-column: 1 / -1;
     text-align: center;
-    padding: 3rem;
-    background: var(--card-bg);
-    border-radius: 20px;
-    color: var(--text);
+    padding: 40px;
+    color: rgba(255,255,255,0.6);
     font-size: 1.1rem;
-    opacity: 0.8;
-}
-
-/* Goal card specific styles */
-.goal-card {
-    position: relative;
-}
-
-.goal-card .saved {
-    color: #F5B942;
-    font-weight: 600;
 }
 
 /* Button states */
@@ -472,9 +590,32 @@ h1 {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .savings-container {
-        grid-template-columns: 1fr;
-        padding: 10px;
+    .savings-summary {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .summary-card {
+        min-height: 100px;
+        padding: 15px;
+    }
+    
+    .summary-amount {
+        font-size: 1.5rem;
+    }
+    
+    .savings-table-container {
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .savings-table {
+        font-size: 0.8rem;
+    }
+    
+    .savings-table th,
+    .savings-table td {
+        padding: 10px 8px;
     }
     
     .popup-content {
@@ -498,5 +639,20 @@ h1 {
     
     .popup-buttons {
         flex-direction: column;
+    }
+    
+    .dock {
+        gap: 15px;
+        padding: 10px 15px;
+    }
+    
+    .icon {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .icon svg {
+        width: 24px;
+        height: 24px;
     }
 }

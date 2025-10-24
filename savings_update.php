@@ -12,7 +12,7 @@ $savings_id = $data['savings_id'];
 $action = $data['action'];
 $uid = $_SESSION['uid'];
 
-// Fetch current saved and target to prevent manipulation
+// Verify user owns this savings goal
 $stmt = $conn->prepare("SELECT amt_svd, target_amt FROM savings_table WHERE savings_id=? AND user_id=?");
 $stmt->bind_param("ii", $savings_id, $uid);
 $stmt->execute();
@@ -57,18 +57,14 @@ if ($action=='update_name') {
     exit();
 }
 
-if ($action=='delete') {
-    $stmt = $conn->prepare("DELETE FROM savings_table WHERE savings_id=? AND user_id=?");
-    $stmt->bind_param("ii", $savings_id, $uid);
+if ($action=='update_status') {
+    $new_status = $data['new_status'];
+    if (!in_array($new_status, ['active', 'inactive'])) exit(json_encode(['success'=>false, 'error'=>'Invalid status']));
+    
+    $stmt = $conn->prepare("UPDATE savings_table SET status=?, uploaded_at=NOW() WHERE savings_id=? AND user_id=?");
+    $stmt->bind_param("sii", $new_status, $savings_id, $uid);
     $stmt->execute();
     $stmt->close();
-
-    // Optionally delete history
-    $stmt2 = $conn->prepare("DELETE FROM savings_history WHERE savings_id=?");
-    $stmt2->bind_param("i", $savings_id);
-    $stmt2->execute();
-    $stmt2->close();
-
     echo json_encode(['success'=>true]);
     exit();
 }

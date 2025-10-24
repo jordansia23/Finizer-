@@ -4,7 +4,7 @@
 const addGoalBtn = document.getElementById("addGoalBtn");
 const popup = document.getElementById("popup");
 const closePopup = document.getElementById("closePopup");
-const goalsContainer = document.getElementById("goalsContainer");
+const goalsTableBody = document.getElementById("goalsTableBody");
 
 const updatePopup = document.getElementById("updatePopup");
 const updateAmountInput = document.getElementById("updateAmount");
@@ -19,136 +19,277 @@ const historyList = document.getElementById("historyList");
 
 const goalNameEdit = document.getElementById("goalNameEdit");
 const saveGoalNameBtn = document.getElementById("saveGoalNameBtn");
-const deleteGoalBtn = document.getElementById("deleteGoalBtn");
+const toggleStatusBtn = document.getElementById("toggleStatusBtn");
+
+// Summary elements
+const activeGoalsCount = document.getElementById("activeGoalsCount");
+const totalSaved = document.getElementById("totalSaved");
+const totalTarget = document.getElementById("totalTarget");
+const overallProgress = document.getElementById("overallProgress");
 
 let activeCard = null;
+let activeRow = null;
+
+// -------------------------
+// Enhanced Notification System
+// -------------------------
+function showNotification(message, type = 'info') {
+    const existingNotifications = document.querySelectorAll('.custom-notification');
+    existingNotifications.forEach(notif => notif.remove());
+    
+    const notification = document.createElement('div');
+    notification.className = `custom-notification ${type}`;
+    
+    const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+    
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span class="notification-icon">${icon}</span>
+            <span class="notification-message">${message}</span>
+        </div>
+    `;
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        padding: 15px 20px;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        z-index: 10000;
+        max-width: 350px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        animation: slideInRight 0.3s ease;
+    `;
+    
+    if (type === 'success') {
+        notification.style.background = 'linear-gradient(135deg, #4CAF50, #66BB6A)';
+    } else if (type === 'error') {
+        notification.style.background = 'linear-gradient(135deg, #f44336, #e57373)';
+    } else {
+        notification.style.background = 'linear-gradient(135deg, #2196F3, #42A5F5)';
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Add styles for notification content
+    const style = document.createElement('style');
+    if (!document.querySelector('#notification-styles')) {
+        style.id = 'notification-styles';
+        style.textContent = `
+            .notification-content {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .notification-icon {
+                font-size: 1.1em;
+                font-weight: bold;
+            }
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }
+    }, 4000);
+}
 
 // -------------------------
 // Initialize Event Listeners
 // -------------------------
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("Initializing savings page...");
+    console.log("Savings page fully loaded");
+    
+    // Calculate initial summary
+    calculateSummary();
     
     // Add Goal Button
-    if (addGoalBtn) {
-        addGoalBtn.addEventListener('click', function() {
-            popup.style.display = "flex";
-        });
-    }
+    addGoalBtn.addEventListener('click', function() {
+        popup.style.display = "flex";
+    });
     
     // Close Buttons
-    if (closePopup) {
-        closePopup.addEventListener('click', function() {
-            popup.style.display = "none";
-        });
-    }
+    closePopup.addEventListener('click', function() {
+        popup.style.display = "none";
+    });
     
-    if (closeUpdatePopup) {
-        closeUpdatePopup.addEventListener('click', function() {
-            updatePopup.style.display = "none";
-        });
-    }
+    closeUpdatePopup.addEventListener('click', function() {
+        updatePopup.style.display = "none";
+    });
     
-    if (closeDetailsBtn) {
-        closeDetailsBtn.addEventListener('click', function() {
-            detailsPopup.style.display = "none";
-        });
-    }
+    closeDetailsBtn.addEventListener('click', function() {
+        detailsPopup.style.display = "none";
+    });
     
-    // Update Buttons
-    if (depositBtn) {
-        depositBtn.addEventListener('click', handleDeposit);
-    }
+    // Event delegation for table buttons
+    goalsTableBody.addEventListener('click', function(e) {
+        const target = e.target;
+        
+        if (target.classList.contains('update-btn')) {
+            handleUpdateClick(target);
+        } else if (target.classList.contains('details-btn')) {
+            handleDetailsClick(target);
+        } else if (target.classList.contains('status-toggle-btn')) {
+            handleStatusToggle(target);
+        }
+    });
     
-    if (withdrawBtn) {
-        withdrawBtn.addEventListener('click', handleWithdraw);
-    }
+    // Deposit/Withdraw buttons
+    depositBtn.addEventListener('click', handleDeposit);
+    withdrawBtn.addEventListener('click', handleWithdraw);
     
-    // Details Buttons
-    if (saveGoalNameBtn) {
-        saveGoalNameBtn.addEventListener('click', handleSaveGoalName);
-    }
-    
-    if (deleteGoalBtn) {
-        deleteGoalBtn.addEventListener('click', handleDeleteGoal);
-    }
+    // Details action buttons
+    saveGoalNameBtn.addEventListener('click', handleSaveGoalName);
+    toggleStatusBtn.addEventListener('click', handleToggleStatus);
     
     // Form submission
-    const savingsForm = document.getElementById("savingsForm");
-    if (savingsForm) {
-        savingsForm.addEventListener('submit', handleCreateGoal);
-    }
-    
-    // ========== ADDED: Setup Update and Details buttons ==========
-    setupGoalCardButtons();
+    document.getElementById("savingsForm").addEventListener('submit', handleCreateGoal);
     
     // Close popups when clicking outside
     setupPopupCloseHandlers();
-    
-    console.log("All event listeners initialized");
 });
 
-// ========== ADDED: Setup buttons for all existing goal cards ==========
-function setupGoalCardButtons() {
-    const updateButtons = document.querySelectorAll('.update-btn');
-    const detailsButtons = document.querySelectorAll('.details-btn');
-    
-    console.log(`Found ${updateButtons.length} update buttons and ${detailsButtons.length} details buttons`);
-    
-    // Update buttons
-    updateButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            console.log("Update button clicked");
-            activeCard = this.closest('.goal-card');
-            updateAmountInput.value = "";
-            updatePopup.style.display = "flex";
-        });
-    });
-    
-    // Details buttons
-    detailsButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            console.log("Details button clicked");
-            activeCard = this.closest('.goal-card');
-            const goalName = activeCard.querySelector('h2').textContent;
-            const history = JSON.parse(activeCard.dataset.history || "[]");
-            
-            goalNameDisplay.textContent = goalName;
-            goalNameEdit.value = goalName;
-            displayHistory(history);
-            detailsPopup.style.display = "flex";
-        });
-    });
-}
-
 function setupPopupCloseHandlers() {
-    // Close when clicking outside popup
-    if (popup) {
-        popup.addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.style.display = "none";
-            }
-        });
-    }
+    popup.addEventListener('click', function(e) {
+        if (e.target === this) this.style.display = "none";
+    });
     
-    if (updatePopup) {
-        updatePopup.addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.style.display = "none";
-            }
-        });
-    }
+    updatePopup.addEventListener('click', function(e) {
+        if (e.target === this) this.style.display = "none";
+    });
     
-    if (detailsPopup) {
-        detailsPopup.addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.style.display = "none";
-            }
-        });
-    }
+    detailsPopup.addEventListener('click', function(e) {
+        if (e.target === this) this.style.display = "none";
+    });
 }
 
-// ========== ADDED: Update Popup Functions ==========
+// -------------------------
+// Summary Calculation
+// -------------------------
+function calculateSummary() {
+    const rows = document.querySelectorAll('.goal-row');
+    let activeCount = 0;
+    let totalSavedAmount = 0;
+    let totalTargetAmount = 0;
+    
+    rows.forEach(row => {
+        const saved = parseFloat(row.dataset.saved);
+        const target = parseFloat(row.dataset.target);
+        const status = row.dataset.status;
+        
+        if (status === 'active') {
+            activeCount++;
+            totalSavedAmount += saved;
+            totalTargetAmount += target;
+        }
+    });
+    
+    const progress = totalTargetAmount > 0 ? (totalSavedAmount / totalTargetAmount * 100) : 0;
+    
+    activeGoalsCount.textContent = activeCount;
+    totalSaved.textContent = `₱${totalSavedAmount.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+    totalTarget.textContent = `₱${totalTargetAmount.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+    overallProgress.textContent = `${progress.toFixed(1)}%`;
+}
+
+// -------------------------
+// Table Button Handlers
+// -------------------------
+function handleUpdateClick(button) {
+    activeRow = button.closest('.goal-row');
+    const savingsId = activeRow.dataset.id;
+    const currentSaved = parseFloat(activeRow.dataset.saved);
+    
+    activeCard = { dataset: { id: savingsId, saved: currentSaved, target: activeRow.dataset.target } };
+    updateAmountInput.value = "";
+    updateAmountInput.focus();
+    updatePopup.style.display = "flex";
+}
+
+function handleDetailsClick(button) {
+    activeRow = button.closest('.goal-row');
+    const savingsId = activeRow.dataset.id;
+    const goalName = activeRow.dataset.name;
+    const status = activeRow.dataset.status;
+    
+    activeCard = { dataset: { id: savingsId } };
+    
+    goalNameDisplay.textContent = goalName;
+    goalNameEdit.value = goalName;
+    toggleStatusBtn.textContent = status === 'active' ? 'Archive Goal' : 'Activate Goal';
+    toggleStatusBtn.className = status === 'active' ? 'status-btn archive' : 'status-btn activate';
+    
+    // Fetch and display history
+    fetchGoalHistory(savingsId);
+    detailsPopup.style.display = "flex";
+}
+
+function handleStatusToggle(button) {
+    const row = button.closest('.goal-row');
+    const savingsId = row.dataset.id;
+    const currentStatus = button.dataset.status;
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    
+    if (!confirm(`Are you sure you want to ${newStatus === 'active' ? 'activate' : 'archive'} this goal?`)) {
+        return;
+    }
+    
+    fetch("savings_update.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+            savings_id: savingsId, 
+            action: "update_status", 
+            new_status: newStatus 
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            // Update UI
+            const statusBadge = row.querySelector('.status-badge');
+            statusBadge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+            statusBadge.className = `status-badge status-${newStatus}`;
+            
+            button.textContent = newStatus === 'active' ? 'Archive' : 'Activate';
+            button.dataset.status = newStatus;
+            
+            // Update row dataset
+            row.dataset.status = newStatus;
+            
+            // Update summary
+            calculateSummary();
+            
+            showNotification(`Goal ${newStatus === 'active' ? 'activated' : 'archived'} successfully!`, 'success');
+        } else {
+            showNotification(data.error || "Failed to update status.", 'error');
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        showNotification("Error updating status.", 'error');
+    });
+}
+
+// -------------------------
+// Update Popup Functions
+// -------------------------
 function handleDeposit(e) {
     e.preventDefault();
     processTransaction("deposit");
@@ -160,21 +301,21 @@ function handleWithdraw(e) {
 }
 
 function processTransaction(action) {
-    if (!activeCard) {
-        alert("No active goal selected.");
+    if (!activeCard || !activeRow) {
+        showNotification("No active goal selected.", 'error');
         return;
     }
 
     const amount = parseFloat(updateAmountInput.value);
     if (isNaN(amount) || amount <= 0) {
-        alert("Please enter a valid amount.");
+        showNotification("Please enter a valid amount.", 'error');
         return;
     }
 
     const currentSaved = parseFloat(activeCard.dataset.saved);
     
     if (action === "withdraw" && amount > currentSaved) {
-        alert("Cannot withdraw more than current savings.");
+        showNotification("Cannot withdraw more than current savings.", 'error');
         return;
     }
 
@@ -190,64 +331,95 @@ function processTransaction(action) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            updateCardAfterTransaction(data.amt_svd, action, amount);
+            updateRowAfterTransaction(data.amt_svd, action, amount);
+            showNotification(`Successfully ${action}ed ₱${amount.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}`, 'success');
         } else {
-            alert(data.error || "Transaction failed.");
+            showNotification(data.error || "Transaction failed.", 'error');
         }
     })
     .catch(err => {
         console.error(err);
-        alert("Error processing transaction.");
+        showNotification("Error processing transaction.", 'error');
     });
 }
 
-function updateCardAfterTransaction(newAmount, action, amount) {
+function updateRowAfterTransaction(newAmount, action, amount) {
     const targetAmount = parseFloat(activeCard.dataset.target);
     
-    // Update card data
-    activeCard.dataset.saved = newAmount;
+    // Update row data
+    activeRow.dataset.saved = newAmount;
     
     // Update displayed values
     const percent = Math.min((newAmount / targetAmount) * 100, 100);
-    activeCard.querySelector(".saved").textContent = 
-        `₱${newAmount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    activeCard.querySelector(".progress-fill").style.width = percent + "%";
-    activeCard.querySelector(".percentage").textContent = percent.toFixed(1) + "%";
     
-    // Update the "Updated" date
-    const amountElements = activeCard.querySelectorAll('.amount');
-    amountElements[amountElements.length - 1].textContent = "Updated: " + new Date().toLocaleDateString();
+    // Update table cells
+    activeRow.cells[2].textContent = `₱${newAmount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     
-    // Add to history
-    addHistory(action, amount);
+    const progressFill = activeRow.querySelector('.progress-fill');
+    const progressText = activeRow.querySelector('.progress-text');
+    progressFill.style.width = percent + "%";
+    progressText.textContent = percent.toFixed(1) + "%";
+    
+    // Update the "Last Updated" date
+    activeRow.cells[6].textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    
+    // Update summary
+    calculateSummary();
     
     updatePopup.style.display = "none";
     updateAmountInput.value = "";
 }
 
-// ========== ADDED: Details Popup Functions ==========
-function displayHistory(history) {
-    if (!historyList) return;
+// -------------------------
+// Details Popup Functions
+// -------------------------
+function fetchGoalHistory(savingsId) {
+    historyList.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Loading history...</div>';
     
+    fetch(`get_savings_history.php?savings_id=${savingsId}`)
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            displayHistory(data.history);
+        } else {
+            displayHistory([]);
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        displayHistory([]);
+    });
+}
+
+function displayHistory(history) {
     historyList.innerHTML = "";
+    
     if (history.length === 0) {
         historyList.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">No transaction history yet.</div>';
     } else {
         history.forEach(item => {
             const div = document.createElement("div");
             div.style.cssText = "margin: 8px 0; padding: 10px; background: #3d3d3d; border-radius: 8px; border-left: 3px solid #F5B942;";
-            div.innerHTML = `<strong>${item.split(" on ")[0]}</strong><br><small style="color:#888;">${item.split(" on ")[1]}</small>`;
+            
+            const actionColor = item.action === 'deposit' ? '#4CAF50' : '#F44336';
+            const actionText = item.action === 'deposit' ? 'Deposited' : 'Withdrew';
+            
+            div.innerHTML = `
+                <strong style="color: ${actionColor};">${actionText} ₱${parseFloat(item.amount).toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
+                <br>
+                <small style="color:#888;">${new Date(item.date).toLocaleString()}</small>
+            `;
             historyList.appendChild(div);
         });
     }
 }
 
 function handleSaveGoalName() {
-    if (!activeCard) return;
+    if (!activeCard || !activeRow) return;
     
     const newName = goalNameEdit.value.trim();
     if (!newName) {
-        alert("Goal name cannot be empty.");
+        showNotification("Goal name cannot be empty.", 'error');
         return;
     }
 
@@ -263,77 +435,74 @@ function handleSaveGoalName() {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            activeCard.querySelector("h2").textContent = newName;
+            activeRow.cells[0].textContent = newName;
+            activeRow.dataset.name = newName;
             goalNameDisplay.textContent = newName;
-            alert("Goal name updated successfully!");
+            showNotification("Goal name updated successfully!", 'success');
         } else {
-            alert(data.error || "Failed to update goal name.");
+            showNotification(data.error || "Failed to update goal name.", 'error');
         }
     })
     .catch(err => {
         console.error(err);
-        alert("Error updating goal name.");
+        showNotification("Error updating goal name.", 'error');
     });
 }
 
-function handleDeleteGoal() {
-    if (!activeCard) return;
+function handleToggleStatus() {
+    if (!activeCard || !activeRow) return;
     
-    if (!confirm("Are you sure you want to delete this goal? This action cannot be undone.")) {
+    const currentStatus = toggleStatusBtn.classList.contains('archive') ? 'active' : 'inactive';
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    
+    if (!confirm(`Are you sure you want to ${newStatus === 'active' ? 'activate' : 'archive'} this goal?`)) {
         return;
     }
-
+    
     fetch("savings_update.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
             savings_id: activeCard.dataset.id, 
-            action: "delete" 
+            action: "update_status", 
+            new_status: newStatus 
         })
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            activeCard.remove();
-            detailsPopup.style.display = "none";
+            // Update the status button in the table
+            const statusBtn = activeRow.querySelector('.status-toggle-btn');
+            const statusBadge = activeRow.querySelector('.status-badge');
             
-            // Show no goals message if no cards left
-            if (document.querySelectorAll('.goal-card').length === 0) {
-                goalsContainer.innerHTML = '<div class="no-goals">No savings goals yet. Click the + button to create one!</div>';
-            }
+            statusBadge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+            statusBadge.className = `status-badge status-${newStatus}`;
+            statusBtn.textContent = newStatus === 'active' ? 'Archive' : 'Activate';
+            statusBtn.dataset.status = newStatus;
             
-            alert("Goal deleted successfully!");
+            // Update row dataset
+            activeRow.dataset.status = newStatus;
+            
+            // Update the details popup button
+            toggleStatusBtn.textContent = newStatus === 'active' ? 'Archive Goal' : 'Activate Goal';
+            toggleStatusBtn.className = newStatus === 'active' ? 'status-btn archive' : 'status-btn activate';
+            
+            // Update summary
+            calculateSummary();
+            
+            showNotification(`Goal ${newStatus === 'active' ? 'activated' : 'archived'} successfully!`, 'success');
         } else {
-            alert(data.error || "Failed to delete goal.");
+            showNotification(data.error || "Failed to update status.", 'error');
         }
     })
     .catch(err => {
         console.error(err);
-        alert("Error deleting goal.");
+        showNotification("Error updating status.", 'error');
     });
-}
-
-// ========== ADDED: History Management ==========
-function addHistory(action, amount) {
-    if (!activeCard) return;
-    
-    const now = new Date();
-    const formattedAmount = amount.toLocaleString('en-PH', { 
-        minimumFractionDigits: 2, 
-        maximumFractionDigits: 2 
-    });
-    const formattedDate = now.toLocaleString();
-
-    const actionText = action === 'deposit' ? 'Deposited' : 'Withdrew';
-    const log = `${actionText} ₱${formattedAmount} on ${formattedDate}`;
-    
-    let history = JSON.parse(activeCard.dataset.history || "[]");
-    history.unshift(log);
-    activeCard.dataset.history = JSON.stringify(history);
 }
 
 // -------------------------
-// Create Goal Handler (your existing code)
+// Create Goal Handler
 // -------------------------
 function handleCreateGoal(e) {
     e.preventDefault();
@@ -343,7 +512,7 @@ function handleCreateGoal(e) {
     const amtSvd = parseFloat(document.getElementById("goalSaved").value) || 0;
 
     if (!goalName || isNaN(targetAmt) || targetAmt <= 0 || amtSvd < 0) {
-        alert("Please enter valid goal name and amounts.");
+        showNotification("Please enter valid goal name and amounts.", 'error');
         return;
     }
 
@@ -361,52 +530,54 @@ function handleCreateGoal(e) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            addNewGoalCard(data);
+            addNewGoalRow(data);
             popup.style.display = "none";
             document.getElementById("savingsForm").reset();
-            
-            // Re-setup buttons for the new card
-            setTimeout(() => {
-                setupGoalCardButtons();
-            }, 100);
+            calculateSummary();
+            showNotification("Goal created successfully!", 'success');
         } else {
-            alert(data.error || "Error creating goal.");
+            showNotification(data.error || "Error creating goal.", 'error');
         }
     })
     .catch(err => {
         console.error(err);
-        alert("Error connecting to server.");
+        showNotification("Error connecting to server.", 'error');
     });
 }
 
-function addNewGoalCard(data) {
+function addNewGoalRow(data) {
     const noGoals = document.querySelector('.no-goals');
     if (noGoals) noGoals.remove();
 
-    const newCard = document.createElement("div");
-    newCard.className = "card goal-card";
-    newCard.dataset.id = data.savings_id;
-    newCard.dataset.saved = data.amt_svd;
-    newCard.dataset.target = data.target_amt;
-    newCard.dataset.history = "[]";
-
     const percent = Math.min((data.amt_svd / data.target_amt) * 100, 100);
+    
+    const newRow = document.createElement("tr");
+    newRow.className = "goal-row";
+    newRow.dataset.id = data.savings_id;
+    newRow.dataset.saved = data.amt_svd;
+    newRow.dataset.target = data.target_amt;
+    newRow.dataset.name = data.goal_name;
+    newRow.dataset.status = 'active';
 
-    newCard.innerHTML = `
-        <h2>${data.goal_name}</h2>
-        <p class="amount">Target: ₱${data.target_amt.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</p>
-        <p class="amount">Saved: <span class="saved">₱${data.amt_svd.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</span></p>
-        <div class="progress">
-            <div class="progress-fill" style="width:${percent}%"></div>
-        </div>
-        <p class="percentage">${percent.toFixed(1)}%</p>
-        <p class="amount">Created: ${new Date().toLocaleDateString()}</p>
-        <p class="amount">Updated: ${new Date().toLocaleDateString()}</p>
-        <div class="btn-group">
-            <button class="btn btn-add update-btn">Update</button>
-            <button class="btn btn-details details-btn">Details</button>
-        </div>
+    newRow.innerHTML = `
+        <td>${data.goal_name}</td>
+        <td>₱${data.target_amt.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+        <td>₱${data.amt_svd.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+        <td>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width:${percent}%"></div>
+                <span class="progress-text">${percent.toFixed(1)}%</span>
+            </div>
+        </td>
+        <td><span class="status-badge status-active">Active</span></td>
+        <td>${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+        <td>${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+        <td>
+            <button class="btn btn-sm btn-add update-btn">Update</button>
+            <button class="btn btn-sm btn-details details-btn">Details</button>
+            <button class="btn btn-sm status-toggle-btn" data-status="active">Archive</button>
+        </td>
     `;
 
-    goalsContainer.prepend(newCard);
+    goalsTableBody.prepend(newRow);
 }
