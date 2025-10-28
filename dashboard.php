@@ -200,15 +200,16 @@ $user = $userResult->fetch_assoc();
       </svg>
     </a>
 
-    <!-- Bills -->
-    <button class="icon" data-app="bills" aria-label="Bills">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-        <path d="M14 2v6h6"/>
-        <line x1="9" y1="13" x2="15" y2="13"/>
-        <line x1="9" y1="17" x2="15" y2="17"/>
-      </svg>
-    </button>
+     <!-- Bills -->
+<a href="bills.php" class="icon" aria-label="Bills">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+    <path d="M14 2v6h6"/>
+    <line x1="9" y1="13" x2="15" y2="13"/>
+    <line x1="9" y1="17" x2="15" y2="17"/>
+  </svg>
+</a>
+
 
     <!-- Spending -->
     <button class="icon" data-app="spending" aria-label="Daily Spending">

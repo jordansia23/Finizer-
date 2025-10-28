@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Finizer - Landing page</title>
+  <title>Finizer - Bills page</title>
   <link rel="icon" type="image/png" href="tabicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -104,31 +104,31 @@
     </a>
 
     <!-- Savings -->
-    <button class="icon active" data-app="savings" aria-label="Savings">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox= "0 0 24 24">
-        <path d="M20 13v-2a8 8 0 0 0-16 0v2a8 8 0 0 0 16 0z"/>
-        <circle cx="12" cy="9" r="1.5" fill="#F5B942"/>
-      </svg>
-    </button>
+<a href="savings.php" class="icon active" aria-label="Savings">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M20 13v-2a8 8 0 0 0-16 0v2a8 8 0 0 0 16 0z"/>
+    <circle cx="12" cy="9" r="1.5" fill="#F5B942"/>
+  </svg>
+</a>
 
     <!-- Bills -->
-    <button class="icon" data-app="bills" aria-label="Bills">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox= "0 0 24 24">
-        <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-        <path d="M14 2v6h6"/>
-        <line x1="9" y1="13" x2="15" y2="13"/>
-        <line x1="9" y1="17" x2="15" y2="17"/>
-      </svg>
-    </button>
+<a href="bills.php" class="icon" aria-label="Bills">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+    <path d="M14 2v6h6"/>
+    <line x1="9" y1="13" x2="15" y2="13"/>
+    <line x1="9" y1="17" x2="15" y2="17"/>
+  </svg>
+</a>
 
-    <!-- Spending -->
-    <button class="icon" data-app="spending" aria-label="Daily Spending">
+      <!-- spending -->
+    <a href="spending.php" class="icon" data-app="spending" aria-label="Daily Spending">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox= "0 0 24 24">
         <rect x="2" y="5" width="20" height="14" rx="2"/>
         <line x1="2" y1="10" x2="22" y2="10"/>
         <line x1="6" y1="15" x2="10" y2="15"/>
       </svg>
-    </button>
+    </a>
 
     <!-- Insight -->
     <button class="icon" data-app="insight" aria-label="Insight">
