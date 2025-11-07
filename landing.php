@@ -1,4 +1,9 @@
 <?php
+<<<<<<< HEAD
+
+$host = "127.0.0.1:3307";
+$port = 3307; 
+=======
 $host = "localhost";
 $user = "root";
 $pass = "";
@@ -9,41 +14,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["signup"])) {
-    $username = $conn->real_escape_string($_POST["username"]);
-    $email = $conn->real_escape_string($_POST["email"]);
-    $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
-
-    $sql = "INSERT INTO usertable (username, email, password) VALUES ('$username', '$email', '$password')";
-    if ($conn->query($sql) === TRUE) {
-        echo "<script>alert('Sign up successful! You can now log in.');</script>";
-    } else {
-        echo "Error: " . $conn->error;
-    }
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
-    $email = $conn->real_escape_string($_POST["email"]);
-    $password = $_POST["password"];
-
-    $sql = "SELECT * FROM usertable WHERE email='$email'";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        if (password_verify($password, $row["password"])) {
-            session_start();
-            $_SESSION["uid"] = $row["uid"];
-            $_SESSION["username"] = $row["username"];
-            header("Location: dashboard.php");
-            exit();
-        } else {
-            echo "<script>alert('Incorrect password!');</script>";
-        }
-    } else {
-        echo "<script>alert('No account found with this email.');</script>";
-    }
-}
 ?> 
 <!DOCTYPE html>
 <html lang="en">
