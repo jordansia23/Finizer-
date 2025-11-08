@@ -240,40 +240,42 @@ function handleDetailsClick(button) {
     detailsPopup.style.display = "flex";
 }
 
+// -------------------------
+// ARCHIVE FUNCTIONALITY - FIXED
+// -------------------------
 function handleStatusToggle(button) {
     const row = button.closest('.goal-row');
     const savingsId = row.dataset.id;
-    const currentStatus = button.dataset.status;
+    const currentStatus = row.dataset.status;
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
     
     if (!confirm(`Are you sure you want to ${newStatus === 'active' ? 'activate' : 'archive'} this goal?`)) {
         return;
     }
     
-    fetch("savings_update.php", {
+    fetch("update_savings_status.php", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-            savings_id: savingsId, 
-            action: "update_status", 
-            new_status: newStatus 
-        })
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `savings_id=${savingsId}&status=${newStatus}`
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            // Update UI
-            const statusBadge = row.querySelector('.status-badge');
-            statusBadge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
-            statusBadge.className = `status-badge status-${newStatus}`;
-            
-            button.textContent = newStatus === 'active' ? 'Archive' : 'Activate';
-            button.dataset.status = newStatus;
-            
-            // Update row dataset
+            // Update the row data
             row.dataset.status = newStatus;
             
-            // Update summary
+            // Update status badge
+            const statusBadge = row.querySelector('.status-badge');
+            statusBadge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+            statusBadge.className = `status-badge ${newStatus === 'active' ? 'status-active' : 'status-inactive'}`;
+            
+            // Update button text
+            button.textContent = newStatus === 'active' ? 'Archive' : 'Activate';
+            
+            // Move the row to the correct position based on status
+            moveRowToCorrectPosition(row, newStatus);
+            
+            // Update summary counts
             calculateSummary();
             
             showNotification(`Goal ${newStatus === 'active' ? 'activated' : 'archived'} successfully!`, 'success');
@@ -285,6 +287,29 @@ function handleStatusToggle(button) {
         console.error(err);
         showNotification("Error updating status.", 'error');
     });
+}
+
+// Fixed function to move row to correct position
+function moveRowToCorrectPosition(row, newStatus) {
+    const tbody = document.getElementById('goalsTableBody');
+    
+    // Remove the row from its current position
+    row.remove();
+    
+    if (newStatus === 'active') {
+        // For active goals, find the first inactive row to insert before it
+        const inactiveRows = Array.from(tbody.querySelectorAll('.goal-row[data-status="inactive"]'));
+        if (inactiveRows.length > 0) {
+            // Insert before the first inactive row
+            tbody.insertBefore(row, inactiveRows[0]);
+        } else {
+            // No inactive rows, just append to the end
+            tbody.appendChild(row);
+        }
+    } else {
+        // For inactive goals, simply append to the end (bottom)
+        tbody.appendChild(row);
+    }
 }
 
 // -------------------------
@@ -401,8 +426,15 @@ function displayHistory(history) {
             const div = document.createElement("div");
             div.style.cssText = "margin: 8px 0; padding: 10px; background: #3d3d3d; border-radius: 8px; border-left: 3px solid #F5B942;";
             
-            const actionColor = item.action === 'deposit' ? '#4CAF50' : '#F44336';
-            const actionText = item.action === 'deposit' ? 'Deposited' : 'Withdrew';
+            // Handle 'initial', 'deposit', and 'withdraw' action types
+            let actionColor, actionText;
+            if (item.action === 'deposit' || item.action === 'initial') {
+                actionColor = '#4CAF50';
+                actionText = item.action === 'initial' ? 'Initial Savings' : 'Deposited';
+            } else {
+                actionColor = '#F44336';
+                actionText = 'Withdrew';
+            }
             
             div.innerHTML = `
                 <strong style="color: ${actionColor};">${actionText} ₱${parseFloat(item.amount).toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong>
@@ -452,21 +484,17 @@ function handleSaveGoalName() {
 function handleToggleStatus() {
     if (!activeCard || !activeRow) return;
     
-    const currentStatus = toggleStatusBtn.classList.contains('archive') ? 'active' : 'inactive';
+    const currentStatus = activeRow.dataset.status;
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
     
     if (!confirm(`Are you sure you want to ${newStatus === 'active' ? 'activate' : 'archive'} this goal?`)) {
         return;
     }
     
-    fetch("savings_update.php", {
+    fetch("update_savings_status.php", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-            savings_id: activeCard.dataset.id, 
-            action: "update_status", 
-            new_status: newStatus 
-        })
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `savings_id=${activeCard.dataset.id}&status=${newStatus}`
     })
     .then(res => res.json())
     .then(data => {
@@ -476,12 +504,14 @@ function handleToggleStatus() {
             const statusBadge = activeRow.querySelector('.status-badge');
             
             statusBadge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
-            statusBadge.className = `status-badge status-${newStatus}`;
+            statusBadge.className = `status-badge ${newStatus === 'active' ? 'status-active' : 'status-inactive'}`;
             statusBtn.textContent = newStatus === 'active' ? 'Archive' : 'Activate';
-            statusBtn.dataset.status = newStatus;
             
             // Update row dataset
             activeRow.dataset.status = newStatus;
+            
+            // Move the row to correct position
+            moveRowToCorrectPosition(activeRow, newStatus);
             
             // Update the details popup button
             toggleStatusBtn.textContent = newStatus === 'active' ? 'Archive Goal' : 'Activate Goal';
@@ -579,5 +609,11 @@ function addNewGoalRow(data) {
         </td>
     `;
 
-    goalsTableBody.prepend(newRow);
+    // Insert new goal at the top (before any inactive goals)
+    const firstInactiveRow = goalsTableBody.querySelector('.goal-row[data-status="inactive"]');
+    if (firstInactiveRow) {
+        goalsTableBody.insertBefore(newRow, firstInactiveRow);
+    } else {
+        goalsTableBody.prepend(newRow);
+    }
 }

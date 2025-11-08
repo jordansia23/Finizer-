@@ -31,7 +31,7 @@ if ($action == 'deposit' || $action == 'withdraw') {
     if ($new_amt < 0) $new_amt = 0;
 
     // Update savings
-    $stmt = $conn->prepare("UPDATE savings_table SET amt_svd=?, uploaded_at=NOW() WHERE savings_id=? AND user_id=?");
+    $stmt = $conn->prepare("UPDATE savings_table SET amt_svd=?, updated_at=NOW() WHERE savings_id=? AND user_id=?");
     $stmt->bind_param("dii", $new_amt, $savings_id, $uid);
     $stmt->execute();
     $stmt->close();
@@ -61,7 +61,7 @@ if ($action=='update_status') {
     $new_status = $data['new_status'];
     if (!in_array($new_status, ['active', 'inactive'])) exit(json_encode(['success'=>false, 'error'=>'Invalid status']));
     
-    $stmt = $conn->prepare("UPDATE savings_table SET status=?, uploaded_at=NOW() WHERE savings_id=? AND user_id=?");
+    $stmt = $conn->prepare("UPDATE savings_table SET status=?, updated_at=NOW() WHERE savings_id=? AND user_id=?");
     $stmt->bind_param("sii", $new_status, $savings_id, $uid);
     $stmt->execute();
     $stmt->close();

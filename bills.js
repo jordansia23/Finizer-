@@ -25,8 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.getElementById("modalOverlay");
   const closeModal = document.getElementById("closeModal");
   const billForm = document.getElementById("billForm");
-  const pendingList = document.getElementById("pending-bills");
-  const paidList = document.getElementById("paid-bills");
 
   const openPopup = () => {
     modal.classList.add("show");
@@ -43,125 +41,144 @@ document.addEventListener("DOMContentLoaded", () => {
   if (overlay) overlay.addEventListener("click", closePopup);
 
   // ===============================
-  // ADD BILL FUNCTIONALITY
-  // ===============================
-  if (billForm) {
-    billForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById("billName").value;
-      const type = document.getElementById("billType").value;
-      const amount = document.getElementById("billAmount").value;
-      const dueDate = document.getElementById("billDueDate").value;
-
-      if (!name || !type || !amount || !dueDate) return;
-
-      const formattedDate = new Date(dueDate).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-      });
-
-      const newBill = document.createElement("div");
-      newBill.classList.add("bill-card");
-      newBill.innerHTML = `
-        <div class="bill-info">
-          <h3>${name}</h3>
-          <p>Type: ${type}</p>
-          <p>Due: ${formattedDate}</p>
-        </div>
-        <div class="bill-right">
-          <p class="bill-amount">₱${parseFloat(amount).toLocaleString()}</p>
-          <button class="mark-paid">Mark Paid</button>
-        </div>
-      `;
-
-      pendingList.appendChild(newBill);
-      billForm.reset();
-      closePopup();
-      checkNotifications(); // update notif list
-    });
-  }
-
-  // ===============================
-  // MARK AS PAID FUNCTIONALITY
-  // ===============================
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("mark-paid")) {
-      const billCard = e.target.closest(".bill-card");
-      const billName = billCard.querySelector("h3").textContent;
-      const billAmount = billCard.querySelector(".bill-amount").textContent;
-
-      const paidDate = new Date().toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-      });
-
-      const paidBill = document.createElement("div");
-      paidBill.classList.add("bill-card", "paid");
-      paidBill.innerHTML = `
-        <div class="bill-info">
-          <h3>${billName}</h3>
-          <p>Paid on: ${paidDate}</p>
-        </div>
-        <p class="bill-amount">${billAmount}</p>
-      `;
-
-      paidList.appendChild(paidBill);
-      billCard.remove();
-      checkNotifications(); // refresh notif list
-    }
-  });
-
-  // ===============================
-  // NOTIFICATION DROPDOWN & REMINDERS
+  // NOTIFICATION DROPDOWN
   // ===============================
   const notifBell = document.getElementById("notifBell");
   const notifDropdown = document.getElementById("notifDropdown");
-  const notifList = document.getElementById("notifList");
 
-  notifBell.addEventListener("click", () => {
-    notifDropdown.classList.toggle("hidden");
+  if (notifBell) {
+    notifBell.addEventListener("click", (e) => {
+      e.stopPropagation();
+      notifDropdown.classList.toggle("hidden");
+    });
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!notifBell.contains(e.target) && !notifDropdown.contains(e.target)) {
+      notifDropdown.classList.add('hidden');
+    }
   });
 
-  // --- Function to check and display notifications ---
-  function checkNotifications() {
-    notifList.innerHTML = "";
-    const today = new Date();
+  // Prevent dropdown from closing when clicking inside it
+  notifDropdown.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
 
-    const bills = document.querySelectorAll("#pending-bills .bill-card");
-    bills.forEach((bill) => {
-      const dueText = bill.querySelector(".bill-info p:nth-child(3)")?.textContent;
-      if (!dueText) return;
+  // ===============================
+  // SEARCH FUNCTIONALITY
+  // ===============================
+  const searchBar = document.querySelector(".search-bar");
+  if (searchBar) {
+    searchBar.addEventListener("input", (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const activeTab = document.querySelector(".tab-btn.active").dataset.tab;
+      const billsList = document.getElementById(`${activeTab}-bills`);
+      const billCards = billsList.querySelectorAll(".bill-card");
 
-      const match = dueText.match(/Due: (.+)/);
-      if (!match) return;
+      billCards.forEach(card => {
+        const billName = card.querySelector("h3").textContent.toLowerCase();
+        const billType = card.querySelector("p:nth-child(2)").textContent.toLowerCase();
+        
+        if (billName.includes(searchTerm) || billType.includes(searchTerm)) {
+          card.style.display = "flex";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  }
 
-      const dueDate = new Date(match[1]);
-      const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+  // ===============================
+  // FORM VALIDATION
+  // ===============================
+  if (billForm) {
+    const dueDateInput = document.getElementById("billDueDate");
+    
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    dueDateInput.min = today;
 
-      let message = "";
-      if (diffDays === 0) {
-        message = `🕒 ${bill.querySelector("h3").textContent} is due today!`;
-      } else if (diffDays > 0 && diffDays <= 3) {
-        message = `⚠️ ${bill.querySelector("h3").textContent} is due in ${diffDays} day(s)!`;
-      } else if (diffDays < 0) {
-        message = `❌ ${bill.querySelector("h3").textContent} is overdue!`;
+    billForm.addEventListener("submit", (e) => {
+      const amount = document.getElementById("billAmount").value;
+      const dueDate = dueDateInput.value;
+
+      if (parseFloat(amount) <= 0) {
+        e.preventDefault();
+        alert("Amount must be greater than 0");
+        return;
       }
 
-      if (message) {
-        const li = document.createElement("li");
-        li.textContent = message;
-        notifList.appendChild(li);
+      if (dueDate < today) {
+        e.preventDefault();
+        alert("Due date cannot be in the past");
+        return;
+      }
+    });
+  }
+
+  // ===============================
+  // AUTO-GENERATE NOTIFICATION BADGE
+  // ===============================
+  function updateNotificationBadge() {
+    const notifList = document.getElementById("notifList");
+    const notificationItems = notifList.querySelectorAll("li");
+    let unreadCount = 0;
+
+    notificationItems.forEach(item => {
+      if (!item.textContent.includes("No upcoming bills")) {
+        unreadCount++;
       }
     });
 
-    if (notifList.children.length === 0) {
-      notifList.innerHTML = "<li>No upcoming bills 🎉</li>";
+    // Remove existing badge
+    const existingBadge = document.querySelector(".notif-badge");
+    if (existingBadge) {
+      existingBadge.remove();
+    }
+
+    // Add new badge if there are notifications
+    if (unreadCount > 0 && notifBell) {
+      const badge = document.createElement("span");
+      badge.className = "notif-badge";
+      badge.textContent = unreadCount;
+      notifBell.style.position = "relative";
+      notifBell.appendChild(badge);
     }
   }
 
-  // Run once on load
-  checkNotifications();
+  // Run on page load
+  updateNotificationBadge();
+
+  // ===============================
+  // KEYBOARD SHORTCUTS
+  // ===============================
+  document.addEventListener("keydown", (e) => {
+    // Ctrl + N to open add bill modal (Cmd + N on Mac)
+    if ((e.ctrlKey || e.metaKey) && e.key === "n") {
+      e.preventDefault();
+      openPopup();
+    }
+
+    // Escape key to close modals
+    if (e.key === "Escape") {
+      closePopup();
+      notifDropdown.classList.add("hidden");
+    }
+  });
+
+  // ===============================
+  // ENHANCED MARK PAID BUTTONS
+  // ===============================
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("mark-paid-btn")) {
+      // Add a small confirmation effect
+      e.target.style.backgroundColor = "#27ae60";
+      e.target.textContent = "✓ Paid";
+      setTimeout(() => {
+        e.target.textContent = "Mark Paid";
+        e.target.style.backgroundColor = "";
+      }, 1500);
+    }
+  });
 });

@@ -1,13 +1,20 @@
 <?php
-<<<<<<< HEAD
+session_start();
+ob_start(); // Keeping this as your professor recommended
 
-$host = "127.0.0.1:3307";
-$port = 3307; 
-=======
+// Database connection - CHOOSE ONE OPTION:
+
+// Option 1: If using default MySQL port (3306)
 $host = "localhost";
 $user = "root";
 $pass = "";
 $dbname = "finizer";
+
+// Option 2: If you need port 3307 (uncomment below and comment above)
+// $host = "127.0.0.1:3307";
+// $user = "root";
+// $pass = "";
+// $dbname = "finizer";
 
 $conn = new mysqli($host, $user, $pass, $dbname);
 if ($conn->connect_error) {
@@ -129,6 +136,29 @@ if ($conn->connect_error) {
         </p>
         <button type="submit" name="login" class="button">Login</button>
       </form>
+      <?php 
+      if (isset($_POST["login"])) {
+    $email = $conn->real_escape_string($_POST["email"]);
+    $password = $_POST["password"];
+
+    $sql = "SELECT * FROM usertable WHERE email='$email'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if (password_verify($password, $row["password"])) {
+            $_SESSION["uid"] = $row["uid"];
+            $_SESSION["username"] = $row["username"];
+            header("Location: dashboard.php");
+            exit();
+        } else {
+            echo "<script>alert('Incorrect password!');</script>";
+        }
+    } else {
+        echo "<script>alert('No account found with this email.');</script>";
+    }
+}
+      ?>
     </div>
   </div>
 
@@ -150,6 +180,20 @@ if ($conn->connect_error) {
         </p>
         <button type="submit" name="signup" class="button">Sign Up</button>
       </form>
+      <?php 
+      if (isset($_POST["signup"])) {
+    $username = $conn->real_escape_string($_POST["username"]);
+    $email = $conn->real_escape_string($_POST["email"]);
+    $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO usertable (username, email, password) VALUES ('$username', '$email', '$password')";
+    if ($conn->query($sql) === TRUE) {
+        echo "<script>alert('Sign up successful! You can now log in.');</script>";
+    } else {
+        echo "Error: " . $conn->error;
+    }
+}
+      ?>
     </div>
   </div>
 

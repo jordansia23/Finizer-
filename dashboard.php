@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 include "db_connect.php";
 
 // Make sure the user is logged in
@@ -11,7 +12,7 @@ if (!isset($_SESSION['uid'])) {
 $user_id = $_SESSION['uid'];
 
 // Handle profile picture upload
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["profile_pic"])) {
+if (isset($_FILES["profile_pic"])) {
     if ($_FILES["profile_pic"]["error"] == 0) {
         $imgData = file_get_contents($_FILES["profile_pic"]["tmp_name"]);
 
@@ -36,7 +37,7 @@ $result = $stmt->get_result();
 if ($row = $result->fetch_assoc()) {
     $profilePic = 'data:image/jpeg;base64,' . base64_encode($row['picture']);
 } else {
-    $profilePic = "uploads/default.png"; // fallback default image
+    $profilePic = "user.webp"; // Changed to user.webp
 }
 
 // Fetch user info (assuming usertable has username & email)
@@ -77,7 +78,7 @@ $user = $userResult->fetch_assoc();
         
           <!-- Upload form -->
           <form action="" method="POST" enctype="multipart/form-data">
-              <img id="previewImg" src="<?php echo $profilePic; ?>" alt="Preview" class="preview-img" style="width:120px;height:120px;border-radius:50%;">   
+              <img id="previewImg" src="<?php echo $profilePic; ?>" alt="Preview" class="preview-img" style="width:120px;height:120px;border-radius:50%;object-fit:cover;">   
               
               <label for="profileUpload" class="upload-label">Change Photo</label>
               <input type="file" id="profileUpload" name="profile_pic" accept="image/*" style="display:none" onchange="this.form.submit()">
@@ -200,15 +201,15 @@ $user = $userResult->fetch_assoc();
       </svg>
     </a>
 
-    <!-- Bills -->
-    <button class="icon" data-app="bills" aria-label="Bills">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-        <path d="M14 2v6h6"/>
-        <line x1="9" y1="13" x2="15" y2="13"/>
-        <line x1="9" y1="17" x2="15" y2="17"/>
-      </svg>
-    </button>
+<!-- Bills -->
+<a href="bills.php" class="icon" aria-label="Bills">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+    <path d="M14 2v6h6"/>
+    <line x1="9" y1="13" x2="15" y2="13"/>
+    <line x1="9" y1="17" x2="15" y2="17"/>
+  </svg>
+</a>
 
     <!-- Spending -->
     <button class="icon" data-app="spending" aria-label="Daily Spending">

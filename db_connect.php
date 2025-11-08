@@ -1,9 +1,9 @@
 <?php
-$servername = "127.0.0.1"; 
+$servername = "localhost"; 
 $username   = "root";      
 $password   = "";           
 $database   = "finizer";
-$port       = 3307;        
+$port       = 3306;        
 
 $conn = new mysqli($servername, $username, $password, $database, $port);
 

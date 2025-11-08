@@ -28,7 +28,7 @@ if (isset($_POST['create_goal'])) {
 
     // Add initial transaction to history if amount saved > 0
     if ($amt_svd > 0) {
-        $history_stmt = $conn->prepare("INSERT INTO savings_history (savings_id, amount, action) VALUES (?, ?, 'deposit')");
+        $history_stmt = $conn->prepare("INSERT INTO savings_history (savings_id, amount, action) VALUES (?, ?, 'initial')");
         $history_stmt->bind_param("id", $new_id, $amt_svd);
         $history_stmt->execute();
         $history_stmt->close();
@@ -43,7 +43,7 @@ if (isset($_POST['create_goal'])) {
             'target_amt' => $target_amt,
             'amt_svd' => $amt_svd,
             'created_at' => date("Y-m-d H:i:s"),
-            'uploaded_at' => date("Y-m-d H:i:s")
+            'updated_at' => date("Y-m-d H:i:s")
         ]);
         exit();
     }
@@ -70,7 +70,13 @@ if (isset($_POST['create_goal'])) {
     </div>
    </header>
 
-   <h1>Savings Goals</h1>
+   <!-- Header with title and button -->
+   <div class="header-container">
+     <h1>Savings Goals</h1>
+     <button class="add-goal-btn" id="addGoalBtn">
+       <span style="font-size: 1rem;">+</span> Add Goal
+     </button>
+   </div>
 
    <!-- Summary Section -->
    <div class="savings-summary">
@@ -131,7 +137,7 @@ if (isset($_POST['create_goal'])) {
                 <th>Goal Name</th>
                 <th>Target Amount</th>
                 <th>Amount Saved</th>
-                <th>Progress</th>
+                <th> Progress</th>
                 <th>Status</th>
                 <th>Created Date</th>
                 <th>Last Updated</th>
@@ -141,13 +147,19 @@ if (isset($_POST['create_goal'])) {
         <tbody id="goalsTableBody">
             <?php
             include("db_connect.php");
-            $query = $conn->prepare("SELECT savings_id, goal_name, target_amt, amt_svd, status, created_at, uploaded_at FROM savings_table WHERE user_id = ? ORDER BY created_at DESC");
+            // Updated query to order by status (active first) then by date
+            $query = $conn->prepare("SELECT savings_id, goal_name, target_amt, amt_svd, status, created_at, updated_at 
+                                   FROM savings_table 
+                                   WHERE user_id = ? 
+                                   ORDER BY 
+                                     CASE WHEN status = 'active' THEN 1 ELSE 2 END,
+                                     created_at DESC");
             $query->bind_param("i", $user_id);
             $query->execute();
             $result = $query->get_result();
 
             if ($result->num_rows === 0) {
-                echo '<tr><td colspan="8" class="no-goals">No savings goals yet. Click the + button to create one!</td></tr>';
+                echo '<tr><td colspan="8" class="no-goals">No savings goals yet. Click the "Add Goal" button to create one!</td></tr>';
             }
 
             while ($row = $result->fetch_assoc()) {
@@ -166,7 +178,7 @@ if (isset($_POST['create_goal'])) {
                         </td>
                         <td><span class="status-badge '.$status_class.'">'.ucfirst($row['status']).'</span></td>
                         <td>'.date('M j, Y', strtotime($row['created_at'])).'</td>
-                        <td>'.date('M j, Y', strtotime($row['uploaded_at'])).'</td>
+                        <td>'.date('M j, Y', strtotime($row['updated_at'])).'</td>
                         <td>
                             <button class="btn btn-sm btn-add update-btn">Update</button>
                             <button class="btn btn-sm btn-details details-btn">Details</button>
@@ -179,9 +191,6 @@ if (isset($_POST['create_goal'])) {
         </tbody>
     </table>
 </div>
-
-<!-- Floating Add Button -->
-<button class="floating-btn" id="addGoalBtn" type="button">＋</button>
   
 <!-- Dock (navigation) -->
 <div class="dock">
@@ -202,14 +211,14 @@ if (isset($_POST['create_goal'])) {
     </button>
 
     <!-- Bills -->
-    <button class="icon" data-app="bills" aria-label="Bills">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox= "0 0 24 24">
-        <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-        <path d="M14 2v6h6"/>
-        <line x1="9" y1="13" x2="15" y2="13"/>
-        <line x1="9" y1="17" x2="15" y2="17"/>
-      </svg>
-    </button>
+<a href="bills.php" class="icon" aria-label="Bills">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox= "0 0 24 24">
+    <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+    <path d="M14 2v6h6"/>
+    <line x1="9" y1="13" x2="15" y2="13"/>
+    <line x1="9" y1="17" x2="15" y2="17"/>
+  </svg>
+</a>
 
     <!-- Spending -->
     <button class="icon" data-app="spending" aria-label="Daily Spending">
