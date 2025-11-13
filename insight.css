@@ -1,0 +1,202 @@
+:root {
+  --primary: #F5B942;
+  --bg: #000000;
+  --card-bg: rgba(255, 255, 255, 0.07);
+  --text: #ffffff;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  background-color: #0d0d0d;
+  color: #fefefe;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 10%;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.brand img {
+  height: 50px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: 800px;
+  margin-top: 15px;
+  color:#F5B942;
+  text-align: center;
+}
+/* dock */
+.dock {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+  padding: 12px 20px;
+  background: rgba(18, 18, 18, 0.021);
+  border-radius: 16px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 10px rgb(36, 35, 35);
+  justify-content: center;
+  z-index: 1000;
+}
+.icon {
+  width: 55px;
+  height: 55px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #F5B942;
+  transition: transform 0.1s, color 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+.icon svg {
+  width: 32px;
+  height: 30px;
+  stroke: #F5B942;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.icon:hover {
+  transform: scale(1.4) translateY(-10px);
+  text-shadow: 0 0 10px #F5B942;
+}
+
+/* tooltip */
+.icon::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #F5B942;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.icon:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+.insight-page {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.page-title {
+  font-size: 2.2rem;
+  color: #F5B942;
+  letter-spacing: 2px;
+  margin-bottom: 30px;
+}
+
+/* insight main content */
+
+.insight-page {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.page-title {
+  font-size: 2.2rem;
+  color: #F5B942;
+  letter-spacing: 2px;
+  margin-bottom: 30px;
+}
+
+.insights {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: rgb(16, 16, 16);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 25px 20px 20px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card h2 {
+  color: #F5B942;
+  font-size: 1.6rem;
+  margin-bottom: 20px; 
+  text-align: center;
+}
+
+.chart-container {
+  height: 250px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px; 
+}
+
+.footer {
+  background-color: #F5B942;
+  color: black;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 12px;
+  padding: 10px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+
+canvas#spendingChart {
+  margin-bottom: 10px;
+}
+
+.chartjs-render-monitor + div,
+.chartjs-legend {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important; /* 2 columns */
+  gap: 10px !important; /* space between labels */
+  justify-items: start !important; /* align left in each cell */
+  text-align: left !important;
+  margin-top: 10px; /* konting space sa taas ng legend */
+}
+
